@@ -5,8 +5,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const path = require('path');
-const recipeRoutes = require('./routes/recipes');
-const groupRoutes = require('./routes/groups');
 const userRoutes = require('./routes/users');
 
 // Conexión a MongoDB
@@ -27,8 +25,6 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir archivos estáticos
 
-app.use('/api/recipes', recipeRoutes);
-app.use('/api/groups', groupRoutes);
 app.use('/api/users', userRoutes);
 
 // Endpoint de login
