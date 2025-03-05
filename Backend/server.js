@@ -6,6 +6,9 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const path = require('path');
 const userRoutes = require('./routes/users');
+const commentRoutes = require('./routes/comments');
+const movieRoutes = require('./routes/movieseries');
+const authMiddleware = require('./middlewares/authMiddleware');
 
 // Conexión a MongoDB
 const mongoURI = process.env.MONGO_URI || "mongodb+srv://luismariojaraba:oN5aIepQcaY13d7G@cluster0.ovhmq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
@@ -26,6 +29,8 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir archivos estáticos
 
 app.use('/api/users', userRoutes);
+app.use('/api/comments', authMiddleware, commentRoutes);
+app.use('/api/movieseries', authMiddleware, movieRoutes);
 
 // Endpoint de login
 const User = require('./models/User'); // Asegúrate de importar el modelo de usuario
