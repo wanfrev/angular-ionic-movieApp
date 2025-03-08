@@ -1,4 +1,3 @@
-// filepath: c:\Users\wanfr\OneDrive\Documentos\Computer-Engineering\URU\Moviles\movieApp\Frontend\src\app\home\home.page.ts
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonIcon, IonFab, IonFabButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';

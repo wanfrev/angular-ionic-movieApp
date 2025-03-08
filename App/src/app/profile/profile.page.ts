@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonItem, IonLabel, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonItem, IonLabel, IonInput, IonButtons } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Importar HttpClient y HttpClientModule
 
@@ -21,8 +21,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'; // Importar
     IonButton,
     IonItem,
     IonLabel,
-    IonInput
-  ]
+    IonInput,
+    IonButtons
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ProfilePage implements OnInit {
   email: string | null = null;
@@ -39,7 +41,9 @@ export class ProfilePage implements OnInit {
     }, (error) => {
       console.error('Error al obtener el perfil del usuario:', error);
       // Redirigir al usuario a la página de inicio de sesión si hay un error
-      this.router.navigate(['/login']);
+      if (error.status === 401 || error.status === 403) {
+        this.router.navigate(['/login']);
+      }
     });
   }
 
@@ -49,5 +53,9 @@ export class ProfilePage implements OnInit {
     }, (error) => {
       console.error('Error al cerrar sesión:', error);
     });
+  }
+
+  navigateBack() {
+    this.router.navigate(['/home']);
   }
 }

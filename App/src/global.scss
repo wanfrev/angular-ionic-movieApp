@@ -34,4 +34,17 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+
+/* Establecer el fondo global con un gradiente */
+body {
+  background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
+  background-attachment: fixed;
+  background-size: cover;
+  color: #ffffff; /* Color del texto para mejor contraste */
+}
+
+ion-content {
+  --background: transparent; /* Hacer el fondo de ion-content transparente para mostrar el gradiente */
+}

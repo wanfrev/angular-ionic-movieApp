@@ -1,9 +1,10 @@
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Buscar Películas</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <img
+    src="assets/icons/chevron-back-outline.svg"
+    class="icon"
+    alt="Back Icon"
+    (click)="navigateBack()"
+  />
 
   <div id="container">
     <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="searchMovies()"></ion-searchbar>
