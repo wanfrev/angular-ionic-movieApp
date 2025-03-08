@@ -1,0 +1,11 @@
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Buscar Películas</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="searchMovies()"></ion-searchbar>
+  </div>
+</ion-content>

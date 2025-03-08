@@ -1,0 +1,67 @@
+ion-content {
+  position: relative;
+  --background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/assets/images/login-register-background.webp') no-repeat center center/cover;
+  z-index: -1;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  box-sizing: border-box;
+  background: rgba(5, 5, 5, 0.5);
+  border-radius: 8px;
+  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+ion-item {
+  width: 100%;
+  margin-bottom: 15px;
+  --border-radius: 8px;
+  --padding-start: 15px;
+  --padding-end: 15px;
+  --background: rgba(5, 5, 5, 0.5);
+}
+
+ion-label {
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+ion-input {
+  --padding-start: 15px;
+  --padding-end: 15px;
+}
+
+.register-button {
+  width: 100%;
+  margin-top: 20px;
+  --border-radius: 8px;
+  --background: #965fd4;
+}
+
+ion-button[fill="clear"] {
+  margin-top: 10px;
+  color: #965fd4;
+}
