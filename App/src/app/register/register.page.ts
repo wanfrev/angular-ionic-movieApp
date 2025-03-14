@@ -13,6 +13,7 @@ import { environment } from '../../environments/environment';
   imports: [IonicFeatureModule, FormsModule]
 })
 export class RegisterPage implements OnInit {
+  username: string = '';
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
@@ -22,7 +23,7 @@ export class RegisterPage implements OnInit {
   ngOnInit() { }
 
   async handleRegister() {
-    if (!this.email || !this.password || !this.confirmPassword) {
+    if (!this.username || !this.email || !this.password || !this.confirmPassword) {
       alert('Por favor, complete todos los campos.');
       return;
     }
@@ -45,6 +46,7 @@ export class RegisterPage implements OnInit {
 
     try {
       const response = await axios.post(`${environment.apiUrl}/users/register`, {
+        username: this.username,
         email: this.email,
         password: this.password
       });

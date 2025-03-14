@@ -3,6 +3,10 @@
   <div class="container">
     <form (ngSubmit)="handleRegister()">
       <ion-item>
+        <ion-label position="floating">Nombre de Usuario</ion-label>
+        <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-label position="floating">Correo Electrónico</ion-label>
         <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
       </ion-item>

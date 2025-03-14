@@ -52,6 +52,11 @@ ion-label {
 ion-input {
   --padding-start: 15px;
   --padding-end: 15px;
+  --color: #ffffff; /* Añadir esta línea */
+}
+
+ion-input::part(native) {
+  color: #ffffff; /* Añadir esta línea */
 }
 
 .login-button {

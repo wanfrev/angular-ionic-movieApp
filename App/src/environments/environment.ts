@@ -1,1 +1,1 @@
-export const environment = {"production":false,"apiUrl":"http://192.168.1.152:5000/api"};
+export const environment = {"production":false,"apiUrl":"http://192.168.10.106:5000/api"};

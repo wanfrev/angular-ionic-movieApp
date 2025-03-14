@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
   imports: [IonicFeatureModule, FormsModule]
 })
 export class LoginPage implements OnInit {
-  email: string = '';
+  username: string = '';
   password: string = '';
 
   constructor(private router: Router) { }
@@ -21,20 +21,14 @@ export class LoginPage implements OnInit {
   ngOnInit() { }
 
   async handleLogin() {
-    if (!this.email || !this.password) {
+    if (!this.username || !this.password) {
       alert('Por favor, complete todos los campos.');
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.email)) {
-      alert('El email no es válido');
-      return;
-    }
-
     try {
-      const response = await axios.post(`${environment.apiUrl}/login`, {
-        email: this.email,
+      const response = await axios.post(`${environment.apiUrl}/users/login`, {
+        username: this.username,
         password: this.password,
       });
 
@@ -45,7 +39,7 @@ export class LoginPage implements OnInit {
       this.router.navigate(['/home']);
     } catch (error) {
       console.error('Sign In Error:', error);
-      alert('Correo o contraseña incorrectos');
+      alert('Nombre de usuario o contraseña incorrectos');
     }
   }
 

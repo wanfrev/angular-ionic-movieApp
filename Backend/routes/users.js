@@ -3,10 +3,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const authMiddleware = require('../middlewares/authMiddleware');
+const { registerSchema, loginSchema } = require('../validators/userValidator');
 const router = express.Router();
 
 // Registrar nuevo usuario
 router.post('/register', async (req, res) => {
+  const { error } = registerSchema.validate(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
+
   const { username, email, password } = req.body;
 
   try {
@@ -16,10 +20,11 @@ router.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('Hashed Password:', hashedPassword); // Verificar el hash de la contraseña
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
-    const token = jwt.sign({ id: newUser._id, email: newUser.email }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
+    const token = jwt.sign({ id: newUser._id, username: newUser.username }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
 
     res.cookie('token', token, { httpOnly: true });
     res.status(201).json({ user: newUser });
@@ -30,20 +35,27 @@ router.post('/register', async (req, res) => {
 
 // Iniciar sesión
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { error } = loginSchema.validate(req.body);
+  if (error) return res.status(400).json({ error: error.details[0].message });
+
+  const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ username });
     if (!user) {
-      return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
+      console.log('Usuario no encontrado:', username); // Verificar si el usuario no se encuentra
+      return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
     }
 
+    console.log('Stored Hashed Password:', user.password); // Verificar la contraseña hasheada almacenada
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('Password Match:', isMatch); // Verificar el resultado de la comparación
     if (!isMatch) {
-      return res.status(401).json({ error: 'Correo o contraseña incorrectos' });
+      console.log('Contraseña incorrecta para el usuario:', username); // Verificar si la contraseña es incorrecta
+      return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
 
     res.cookie('token', token, { httpOnly: true });
     res.json({ mensaje: "Inicio de sesión exitoso" });
