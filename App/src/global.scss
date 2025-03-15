@@ -39,11 +39,5 @@
 
 /* Establecer el fondo global con un gradiente */
 body {
-  background-image: linear-gradient(to top, #09203f 0%, #537895 100%);
-  background-attachment: fixed;
-  background-size: cover;
-}
-
-ion-content {
-  --background: transparent; /* Hacer el fondo de ion-content transparente para mostrar el gradiente */
+  background-color: #fff;
 }

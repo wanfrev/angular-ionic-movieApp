@@ -8,5 +8,17 @@
 
   <div id="container">
     <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="searchMovies()"></ion-searchbar>
+
+    <ion-list *ngIf="movies.length > 0">
+      <ion-item *ngFor="let movie of movies" class="movie-item" (click)="openMovieDetail(movie.id)">
+        <ion-thumbnail slot="start">
+          <img [src]="movie.image" alt="{{ movie.title }}"/>
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ movie.title }}</h2>
+          <p>{{ movie.description }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>

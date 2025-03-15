@@ -1,9 +1,10 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonItem, IonLabel, IonInput, IonButtons } from '@ionic/angular/standalone';
+import { IonContent, IonButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Importar HttpClient y HttpClientModule
+import { Location } from '@angular/common'; // Importar Location
 
 @Component({
   selector: 'app-profile',
@@ -15,21 +16,14 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'; // Importar
     FormsModule,
     HttpClientModule, // Asegurarse de que HttpClientModule esté aquí
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButtons
+    IonButton
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ProfilePage implements OnInit {
   email: string | null = null;
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private location: Location) { } // Inyectar Location
 
   ngOnInit() {
     this.getUserProfile();
@@ -56,6 +50,6 @@ export class ProfilePage implements OnInit {
   }
 
   navigateBack() {
-    this.router.navigate(['/home']);
+    this.location.back(); // Navegar a la página anterior
   }
 }

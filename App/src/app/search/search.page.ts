@@ -1,12 +1,16 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonSearchbar, IonButton, IonButtons } from '@ionic/angular/standalone';
+import { IonContent, IonSearchbar } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common'; // Importar Location
+import { MovieService } from '../services/movie.service'; // Importar el servicio
 
 interface Movie {
+  id: number;
   title: string;
   description: string;
+  image: string;
 }
 
 @Component({
@@ -14,23 +18,39 @@ interface Movie {
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, CommonModule, FormsModule, IonLabel, IonSearchbar, IonButton, IonButtons],
+  imports: [IonContent, CommonModule, FormsModule, IonSearchbar],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SearchPage implements OnInit {
   searchQuery: string = '';
   movies: Movie[] = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private movieService: MovieService, private location: Location) { } // Inyectar Location
 
   ngOnInit() {
   }
 
   searchMovies() {
-    // Implementar la lógica de búsqueda aquí
+    if (this.searchQuery.trim() === '') {
+      this.movies = [];
+      return;
+    }
+
+    this.movieService.searchMovies(this.searchQuery).subscribe(results => {
+      this.movies = results.map((movie: any) => ({
+        id: movie.id,
+        title: movie.title,
+        description: movie.overview,
+        image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+      }));
+    });
+  }
+
+  openMovieDetail(movieId: number) {
+    this.router.navigate(['/detail-movie', movieId]);
   }
 
   navigateBack() {
-    this.router.navigate(['/home']);
+    this.location.back(); // Navegar a la página anterior
   }
 }

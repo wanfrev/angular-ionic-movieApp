@@ -1,16 +1,28 @@
 <ion-content [fullscreen]="true">
   <div class="icon-container">
-    <img src="assets/icons/search-circle-outline.svg" (click)="navigateTo('search')" class="icon" alt="Search Icon">
-    <img src="assets/icons/person-circle-outline.svg" (click)="navigateTo('profile')" class="icon" alt="Profile Icon">
+    <img src="assets/icons/search-outline.svg" (click)="navigateTo('search')" class="icon" alt="Search Icon">
+    <img src="assets/icons/person-outline.svg" (click)="navigateTo('profile')" class="icon" alt="Profile Icon">
   </div>
 
   <div id="container">
-    <strong>Home</strong>
+    <strong>Películas Populares</strong>
+    <!-- Contenido principal de la página de inicio -->
+    <ion-list>
+      <ion-item *ngFor="let movie of popularMovies" [routerLink]="['/detail-movie', movie.id]">
+        <ion-thumbnail slot="start">
+          <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2>{{ movie.title }}</h2>
+          <p>{{ movie.release_date }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="navigateTo('library')">
-      <img src="assets/icons/apps-outline.svg" class="icon" alt="Library Icon">
+      <img src="assets/icons/list-outline.svg" class="icon" alt="List Icon">
     </ion-fab-button>
   </ion-fab>
 </ion-content>

@@ -1,3 +1,4 @@
+// filepath: c:\Users\wanfr\OneDrive\Documentos\Computer-Engineering\URU\Moviles\movieApp\App\src\app\app.routes.ts
 import { Routes } from '@angular/router';
 import { HomePage } from './home/home.page';
 import { SearchPage } from './search/search.page';
@@ -33,5 +34,9 @@ export const routes: Routes = [
   {
     path: 'profile',
     component: ProfilePage
+  },
+  {
+    path: 'detail-movie/:id', // Agrega el parámetro id a la ruta
+    loadComponent: () => import('./detail-movie/detail-movie.page').then(m => m.MovieDetailPage)
   }
 ];
