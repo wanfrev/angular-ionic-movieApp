@@ -1,26 +1,45 @@
-<ion-content [fullscreen]="true">
-  <div class="content">
-    <img
-      src="assets/icons/chevron-back-outline.svg"
-      class="icon"
-      alt="Back Icon"
-      (click)="navigateBack()"
-    />
+<div class="content">
+  <img
+    src="assets/icons/chevron-back-outline.svg"
+    class="icon"
+    alt="Back Icon"
+    (click)="navigateBack()"
+  />
 
-    <div id="container">
-      <input type="text" [(ngModel)]="searchQuery" (input)="searchMovies()" placeholder="Buscar películas..." class="searchbar"/>
+  <div id="container">
+    <input type="text" [(ngModel)]="searchQuery" (input)="searchMovies()" placeholder="Buscar películas..." class="searchbar"/>
 
-      <ul *ngIf="movies.length > 0" class="movie-list">
-        <li *ngFor="let movie of movies" class="movie-item" (click)="openMovieDetail(movie.id)">
-          <div class="thumbnail">
-            <img [src]="movie.image" alt="{{ movie.title }}"/>
-          </div>
-          <div class="movie-info">
-            <h2>{{ movie.title }}</h2>
-            <p>{{ movie.description }}</p>
-          </div>
-        </li>
-      </ul>
+    <div class="filters">
+      <div class="filter">
+        <label for="year">Año de salida:</label>
+        <input type="number" id="year" [(ngModel)]="year" (change)="searchMovies()" placeholder="Año"/>
+      </div>
+      <div class="filter">
+        <label for="genre">Género:</label>
+        <select id="genre" [(ngModel)]="selectedGenre" (change)="searchMovies()">
+          <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
+        </select>
+      </div>
+      <div class="filter">
+        <label for="duration">Duración:</label>
+        <input type="range" id="duration" [(ngModel)]="duration" (input)="searchMovies()" min="0" max="300"/>
+        <span>{{ duration }} min</span>
+      </div>
     </div>
+
+    <ul *ngIf="movies.length > 0" class="movie-list">
+      <li *ngFor="let movie of movies" class="movie-item" (click)="openMovieDetail(movie.id)">
+        <div class="thumbnail">
+          <img [src]="movie.image" alt="{{ movie.title }}"/>
+        </div>
+        <div class="movie-info">
+          <h2>{{ movie.title }}</h2>
+          <p>{{ movie.description }}</p>
+          <p><strong>Género:</strong> {{ movie.genre }}</p>
+          <p><strong>Duración:</strong> {{ movie.runtime }} min</p>
+          <p><strong>Año de salida:</strong> {{ movie.release_date | date:'yyyy' }}</p>
+        </div>
+      </li>
+    </ul>
   </div>
-</ion-content>
+</div>

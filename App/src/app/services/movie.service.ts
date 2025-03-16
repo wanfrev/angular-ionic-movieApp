@@ -19,13 +19,33 @@ export class MovieService {
     }).then(response => response.data.results));
   }
 
-  searchMovies(query: string): Observable<any> {
-    return from(axios.get(`${this.apiUrl}/search/movie`, {
+  searchMovies(query: string, genre?: number, year?: number, duration?: number): Observable<any> {
+    const params: any = {
+      api_key: this.apiKey,
+      query: query
+    };
+
+    if (genre !== undefined) {
+      params.with_genres = genre;
+    }
+
+    if (year !== undefined) {
+      params.primary_release_year = year;
+    }
+
+    if (duration !== undefined) {
+      params.with_runtime_gte = duration;
+    }
+
+    return from(axios.get(`${this.apiUrl}/search/movie`, { params }).then(response => response.data.results));
+  }
+
+  getGenres(): Observable<any> {
+    return from(axios.get(`${this.apiUrl}/genre/movie/list`, {
       params: {
-        api_key: this.apiKey,
-        query: query
+        api_key: this.apiKey
       }
-    }).then(response => response.data.results));
+    }).then(response => response.data.genres));
   }
 
   getMovieDetails(movieId: string): Observable<any> {

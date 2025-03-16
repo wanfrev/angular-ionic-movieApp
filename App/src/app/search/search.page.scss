@@ -1,5 +1,25 @@
 .content {
   padding: 16px;
+  overflow-y: auto; /* Permitir desplazamiento vertical */
+  height: 100vh; /* Asegurar que el contenedor ocupe toda la altura de la ventana */
+}
+
+.content::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra de desplazamiento */
+}
+
+.content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color de fondo de la pista */
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #888; /* Color de la barra de desplazamiento */
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color de la barra de desplazamiento al pasar el mouse */
 }
 
 .icon {
@@ -21,6 +41,38 @@
   border-radius: 8px;
   font-size: 16px;
   background-color: transparent;
+  color: #333333;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.filter {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter label {
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.filter input,
+.filter select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: transparent;
+  color: #333333;
+}
+
+.filter label, span {
+  color: #333333;
 }
 
 .movie-list {
@@ -39,6 +91,7 @@
   margin-bottom: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  width: 100%; /* Asegurar que las tarjetas no se expandan más allá del contenedor */
 }
 
 .thumbnail {
@@ -57,16 +110,27 @@
 
 .movie-info {
   flex: 1;
+  min-width: 0;
 }
 
 .movie-info h2 {
   font-size: 18px;
   font-weight: bold;
   margin: 0;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .movie-info p {
   font-size: 14px;
   color: #666666;
   margin: 4px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Mostrar hasta 3 líneas */
+  line-clamp: 3; /* Propiedad estándar */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
