@@ -14,11 +14,13 @@ import { FormsModule } from '@angular/forms';
 })
 export class HomePage implements OnInit {
   popularMovies: any[] = [];
+  recommendedMovies: any[] = [];
 
   constructor(private router: Router, private movieService: MovieService) {}
 
   ngOnInit(): void {
     this.getPopularMovies();
+    this.getRecommendedMovies();
   }
 
   getPopularMovies() {
@@ -29,6 +31,18 @@ export class HomePage implements OnInit {
       },
       error: (error) => {
         console.error('Error al obtener películas populares:', error);
+      }
+    });
+  }
+
+  getRecommendedMovies() {
+    this.movieService.getRecommendedMovies().subscribe({
+      next: (data) => {
+        this.recommendedMovies = data;
+        console.log('Películas recomendadas:', this.recommendedMovies);
+      },
+      error: (error) => {
+        console.error('Error al obtener películas recomendadas:', error);
       }
     });
   }

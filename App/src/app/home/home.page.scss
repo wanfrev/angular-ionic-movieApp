@@ -1,4 +1,4 @@
-/* Contenedor de iconos */
+/* Estilos para el contenedor de iconos */
 .icon-container {
   display: flex;
   justify-content: space-between;
@@ -21,8 +21,29 @@
 }
 
 /* Contenedor principal */
-#container {
+.container {
   padding: 16px;
+  overflow-y: auto; /* Habilitar desplazamiento vertical */
+  height: 100%; /* Ajustar la altura para permitir el desplazamiento */
+  box-sizing: border-box; /* Incluir el padding en el cálculo de la altura */
+}
+
+.content::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra de desplazamiento */
+}
+
+.content::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color de fondo de la pista */
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #888; /* Color de la barra de desplazamiento */
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color de la barra de desplazamiento al pasar el mouse */
 }
 
 /* Título */

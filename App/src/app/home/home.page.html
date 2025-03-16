@@ -5,12 +5,28 @@
       <img src="assets/icons/person-outline.svg" (click)="navigateTo('profile')" class="icon" alt="Profile Icon">
     </div>
 
-    <div id="container">
-      <strong>Películas Populares</strong>
+    <div class="container">
+      <strong>Popular Movies</strong>
       <!-- Contenido principal de la página de inicio -->
       <div class="carousel">
         <div class="carousel-inner">
           <div *ngFor="let movie of popularMovies" (click)="navigateToDetail(movie.id)" class="carousel-item">
+            <div class="thumbnail">
+              <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
+            </div>
+            <div class="movie-info">
+              <h2><strong>{{ movie.title }}</strong></h2>
+              <p>{{ movie.release_date }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <strong>Recommended Movies</strong>
+      <!-- Contenido de películas recomendadas -->
+      <div class="carousel">
+        <div class="carousel-inner">
+          <div *ngFor="let movie of recommendedMovies" (click)="navigateToDetail(movie.id)" class="carousel-item">
             <div class="thumbnail">
               <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
             </div>

@@ -19,6 +19,14 @@ export class MovieService {
     }).then(response => response.data.results));
   }
 
+  getRecommendedMovies(): Observable<any> {
+    return from(axios.get(`${this.apiUrl}/movie/top_rated`, {
+      params: {
+        api_key: this.apiKey
+      }
+    }).then(response => response.data.results));
+  }
+
   searchMovies(query: string, genre?: number, year?: number, duration?: number): Observable<any> {
     const params: any = {
       api_key: this.apiKey,
