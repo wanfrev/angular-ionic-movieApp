@@ -1,19 +1,37 @@
-<ion-content>
+<div class="content">
   <img
     src="assets/icons/chevron-back-outline.svg"
     class="icon"
     alt="Back Icon"
     (click)="navigateBack()"
   />
-  <div class="background-blur" [style.background-image]="'url(https://image.tmdb.org/t/p/w500' + movie.poster_path + ')'"></div>
+  <div
+    class="background-blur"
+    [style.background-image]="'url(https://image.tmdb.org/t/p/w500' + movie.poster_path + ')'"
+  ></div>
   <div class="container">
+    <h1 class="card-title">{{ movie.title }}</h1>
     <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
-    <ion-card-header>
-      <ion-card-title>{{ movie.title }}</ion-card-title>
-      <ion-card-subtitle>{{ movie.release_date }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
+    <div class="card-header">
+      <div class="card-subtitle">
+        <strong>Release Date:</strong>
+        <span>{{ movie.release_date }}</span>
+      </div>
+      <div class="card-subtitle">
+        <strong>Director:</strong>
+        <span>{{ director }}</span>
+      </div>
+      <div class="card-subtitle">
+        <strong>Duration:</strong>
+        <span>{{ movie.runtime }} min</span>
+      </div>
+      <div class="card-subtitle">
+        <strong>Rating:</strong>
+        <span>{{ movie.vote_average }} / 10</span>
+      </div>
+    </div>
+    <div class="card-content">
       <p>{{ movie.overview }}</p>
-    </ion-card-content>
+    </div>
   </div>
-</ion-content>
+</div>

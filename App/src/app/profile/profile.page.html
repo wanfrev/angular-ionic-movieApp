@@ -1,14 +1,17 @@
 <ion-content [fullscreen]="true">
-  <img
-    src="assets/icons/chevron-back-outline.svg"
-    class="icon"
-    alt="Back Icon"
-    (click)="navigateBack()"
-  />
+  <div class="content">
+    <img
+      src="assets/icons/chevron-back-outline.svg"
+      class="icon"
+      alt="Back Icon"
+      (click)="navigateBack()"
+    />
 
-  <div id="container">
-    <strong>Profile</strong>
-    <p>Username: {{ email }}</p>
-    <ion-button (click)="signOut()">Cerrar sesión</ion-button>
+    <div id="container">
+      <strong>Profile</strong>
+      <p>Username: {{ username }}</p>
+      <p>Email: {{ email }}</p>
+      <button (click)="signOut()" class="signout-button">Cerrar sesión</button>
+    </div>
   </div>
 </ion-content>

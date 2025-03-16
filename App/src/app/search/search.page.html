@@ -1,24 +1,26 @@
 <ion-content [fullscreen]="true">
-  <img
-    src="assets/icons/chevron-back-outline.svg"
-    class="icon"
-    alt="Back Icon"
-    (click)="navigateBack()"
-  />
+  <div class="content">
+    <img
+      src="assets/icons/chevron-back-outline.svg"
+      class="icon"
+      alt="Back Icon"
+      (click)="navigateBack()"
+    />
 
-  <div id="container">
-    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="searchMovies()"></ion-searchbar>
+    <div id="container">
+      <input type="text" [(ngModel)]="searchQuery" (input)="searchMovies()" placeholder="Buscar películas..." class="searchbar"/>
 
-    <ion-list *ngIf="movies.length > 0">
-      <ion-item *ngFor="let movie of movies" class="movie-item" (click)="openMovieDetail(movie.id)">
-        <ion-thumbnail slot="start">
-          <img [src]="movie.image" alt="{{ movie.title }}"/>
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{ movie.title }}</h2>
-          <p>{{ movie.description }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+      <ul *ngIf="movies.length > 0" class="movie-list">
+        <li *ngFor="let movie of movies" class="movie-item" (click)="openMovieDetail(movie.id)">
+          <div class="thumbnail">
+            <img [src]="movie.image" alt="{{ movie.title }}"/>
+          </div>
+          <div class="movie-info">
+            <h2>{{ movie.title }}</h2>
+            <p>{{ movie.description }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </ion-content>

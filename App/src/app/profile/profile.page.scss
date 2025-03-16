@@ -1,5 +1,5 @@
-ion-content {
-  --background: transparent;
+.content {
+  padding: 16px;
 }
 
 #container {
@@ -10,8 +10,26 @@ ion-content {
   height: 100%;
   padding: 16px;
 }
+
 .icon {
   width: 24px;
   height: 24px;
   cursor: pointer;
+  margin: 16px;
+}
+
+.signout-button {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.signout-button:hover {
+  background-color: #0056b3;
 }

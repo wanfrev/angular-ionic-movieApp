@@ -3,6 +3,8 @@
   display: flex;
   justify-content: space-between;
   padding: 16px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
 }
 
 /* Iconos */
@@ -10,38 +12,120 @@
   width: 32px;
   height: 32px;
   cursor: pointer;
-  color: #333;
+  color: #495057;
+  transition: color 0.3s;
 }
 
-/* Iconos dentro del botón FAB */
-ion-fab-button .icon {
-  width: 24px;
-  height: 24px;
+.icon:hover {
+  color: #007bff;
 }
 
-/* Ajustes para el botón FAB */
-ion-fab {
+/* Contenedor principal */
+#container {
+  padding: 16px;
+}
+
+/* Título */
+strong {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  color: #343a40;
+}
+
+/* Carrusel */
+.carousel {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 16px;
+  -webkit-overflow-scrolling: touch; /* Asegura el desplazamiento suave en iOS */
+}
+
+.carousel::-webkit-scrollbar {
+  height: 8px; /* Altura de la barra de desplazamiento */
+}
+
+.carousel::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color de fondo de la pista */
+  border-radius: 10px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background: #888; /* Color de la barra de desplazamiento */
+  border-radius: 10px;
+}
+
+.carousel::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color de la barra de desplazamiento al pasar el mouse */
+}
+
+.carousel-inner {
+  display: flex;
+  flex-direction: row;
+}
+
+.carousel-item {
+  display: inline-block;
+  margin-right: 16px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.carousel-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail img {
+  width: 100px;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.movie-info {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.movie-info h2 {
+  margin: 0;
+  font-size: 1rem;
+  color: #343a40;
+}
+
+.movie-info p {
+  margin: 4px 0 0;
+  color: #6c757d;
+}
+
+/* Botón FAB */
+.fab-container {
+  position: fixed;
   bottom: 16px;
   right: 16px;
 }
 
-/* Estilos para listas horizontales */
-.horizontal-list {
+.fab-button {
+  background-color: #007bff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
   display: flex;
-  overflow-x: auto;
-  padding: 16px 0;
-}
-
-.horizontal-list ion-item {
-  min-width: 150px;
-  flex: 0 0 auto;
-  margin-right: 16px;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.horizontal-list ion-thumbnail {
-  margin-bottom: 8px;
+.fab-button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.fab-button .icon {
+  width: 24px;
+  height: 24px;
+  color: #fff;
 }

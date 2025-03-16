@@ -1,28 +1,32 @@
 <ion-content [fullscreen]="true">
-  <div class="icon-container">
-    <img src="assets/icons/search-outline.svg" (click)="navigateTo('search')" class="icon" alt="Search Icon">
-    <img src="assets/icons/person-outline.svg" (click)="navigateTo('profile')" class="icon" alt="Profile Icon">
-  </div>
+  <div class="content">
+    <div class="icon-container">
+      <img src="assets/icons/search-outline.svg" (click)="navigateTo('search')" class="icon" alt="Search Icon">
+      <img src="assets/icons/person-outline.svg" (click)="navigateTo('profile')" class="icon" alt="Profile Icon">
+    </div>
 
-  <div id="container">
-    <strong>Películas Populares</strong>
-    <!-- Contenido principal de la página de inicio -->
-    <ion-list>
-      <ion-item *ngFor="let movie of popularMovies" [routerLink]="['/detail-movie', movie.id]">
-        <ion-thumbnail slot="start">
-          <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{ movie.title }}</h2>
-          <p>{{ movie.release_date }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-  </div>
+    <div id="container">
+      <strong>Películas Populares</strong>
+      <!-- Contenido principal de la página de inicio -->
+      <div class="carousel">
+        <div class="carousel-inner">
+          <div *ngFor="let movie of popularMovies" (click)="navigateToDetail(movie.id)" class="carousel-item">
+            <div class="thumbnail">
+              <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
+            </div>
+            <div class="movie-info">
+              <h2>{{ movie.title }}</h2>
+              <p>{{ movie.release_date }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="navigateTo('library')">
-      <img src="assets/icons/list-outline.svg" class="icon" alt="List Icon">
-    </ion-fab-button>
-  </ion-fab>
+    <div class="fab-container">
+      <button (click)="navigateTo('library')" class="fab-button">
+        <img src="assets/icons/list-outline.svg" class="icon" alt="List Icon">
+      </button>
+    </div>
+  </div>
 </ion-content>

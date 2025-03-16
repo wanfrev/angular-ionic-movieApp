@@ -43,7 +43,10 @@ export class LoginPage implements OnInit {
     }
   }
 
-  navigateToRegister() {
+  navigateToRegister(event: Event) {
+    event.preventDefault();
+    this.username = '';
+    this.password = '';
     this.router.navigate(['/register']);
   }
 }

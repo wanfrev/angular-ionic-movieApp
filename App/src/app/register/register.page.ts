@@ -58,7 +58,12 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  navigateToLogin() {
+  navigateToLogin(event: Event) {
+    event.preventDefault();
+    this.username = '';
+    this.email = '';
+    this.password = '';
+    this.confirmPassword = '';
     this.router.navigate(['/login']);
   }
 }

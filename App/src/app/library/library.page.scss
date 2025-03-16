@@ -1,8 +1,14 @@
-ion-content {
-  --background: transparent;
+.content {
+  padding: 16px;
 }
+
 .icon {
   width: 24px;
   height: 24px;
   cursor: pointer;
+  margin: 16px;
+}
+
+#container {
+  padding: 16px;
 }

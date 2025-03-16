@@ -1,7 +1,6 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http'; // Importar HttpClient y HttpClientModule
 import { Location } from '@angular/common'; // Importar Location
@@ -15,12 +14,11 @@ import { Location } from '@angular/common'; // Importar Location
     CommonModule,
     FormsModule,
     HttpClientModule, // Asegurarse de que HttpClientModule esté aquí
-    IonContent,
-    IonButton
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ProfilePage implements OnInit {
+  username: string | null = null;
   email: string | null = null;
 
   constructor(private router: Router, private http: HttpClient, private location: Location) { } // Inyectar Location
@@ -31,6 +29,7 @@ export class ProfilePage implements OnInit {
 
   getUserProfile() {
     this.http.get('http://localhost:5000/api/users/profile', { withCredentials: true }).subscribe((response: any) => {
+      this.username = response.username;
       this.email = response.email;
     }, (error) => {
       console.error('Error al obtener el perfil del usuario:', error);

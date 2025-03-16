@@ -1,25 +1,24 @@
 <ion-content [fullscreen]="true">
-  <div class="background-image"></div>
   <div class="container">
     <form (ngSubmit)="handleRegister()">
-      <ion-item>
-        <ion-label position="floating">Nombre de Usuario</ion-label>
-        <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Correo Electrónico</ion-label>
-        <ion-input type="email" [(ngModel)]="email" name="email" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Confirmar Contraseña</ion-label>
-        <ion-input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required></ion-input>
-      </ion-item>
-      <ion-button class="register-button" expand="full" type="submit">Registrarse</ion-button>
+      <div class="form-group">
+        <label for="username">Nombre de Usuario</label>
+        <input type="text" id="username" [(ngModel)]="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Contraseña</label>
+        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+      </div>
+      <button class="login-button" type="submit">Registrarse</button>
+      <button class="register-button" (click)="navigateToLogin($event)">¿Ya tienes cuenta? Inicia sesión</button>
     </form>
-    <ion-button expand="full" fill="clear" (click)="navigateToLogin()">¿Ya tienes cuenta? Inicia sesión</ion-button>
   </div>
 </ion-content>

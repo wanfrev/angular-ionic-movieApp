@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MovieService } from '../services/movie.service';
-import { NgFor } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonicModule, RouterModule, NgFor],
+  standalone: true,
+  imports: [CommonModule, FormsModule, IonicModule]
 })
 export class HomePage implements OnInit {
   popularMovies: any[] = [];
@@ -34,5 +35,9 @@ export class HomePage implements OnInit {
 
   navigateTo(page: string) {
     this.router.navigate([`/${page}`]);
+  }
+
+  navigateToDetail(movieId: number) {
+    this.router.navigate([`/detail-movie`, movieId]);
   }
 }
