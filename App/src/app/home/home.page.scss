@@ -54,6 +54,10 @@ strong {
   color: #343a40;
 }
 
+.explore-title {
+  cursor: pointer;
+}
+
 /* Carrusel */
 .carousel {
   overflow-x: auto;
@@ -91,6 +95,12 @@ strong {
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
   width: 200px; /* Tamaño fijo para las tarjetas */
+  border: 2px solid transparent; /* Borde transparente por defecto */
+}
+
+.carousel-item:hover {
+  transform: scale(1.05); /* Aumentar ligeramente el tamaño */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Añadir sombra */
 }
 
 .thumbnail {

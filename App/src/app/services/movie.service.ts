@@ -27,6 +27,17 @@ export class MovieService {
     }).then(response => response.data.results));
   }
 
+  getExploreMovies(): Observable<any> {
+    const today = new Date().toISOString().split('T')[0]; // Obtener la fecha actual en formato YYYY-MM-DD
+    return from(axios.get(`${this.apiUrl}/discover/movie`, {
+      params: {
+        api_key: this.apiKey,
+        sort_by: 'release_date.desc', // Ordenar por fecha de lanzamiento descendente
+        'release_date.lte': today // Filtrar por películas lanzadas hasta la fecha actual
+      }
+    }).then(response => response.data.results));
+  }
+
   searchMovies(query: string, genre?: number, year?: number, duration?: number): Observable<any> {
     const params: any = {
       api_key: this.apiKey,

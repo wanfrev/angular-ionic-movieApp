@@ -38,5 +38,9 @@ export const routes: Routes = [
   {
     path: 'detail-movie/:id', // Agrega el parámetro id a la ruta
     loadComponent: () => import('./detail-movie/detail-movie.page').then(m => m.MovieDetailPage)
+  },
+  {
+    path: 'explore',
+    loadComponent: () => import('./explore/explore.page').then( m => m.ExplorePage)
   }
 ];

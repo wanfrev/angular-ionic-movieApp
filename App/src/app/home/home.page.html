@@ -1,16 +1,48 @@
 <ion-content [fullscreen]="true">
   <div class="content">
     <div class="icon-container">
-      <img src="assets/icons/search-outline.svg" (click)="navigateTo('search')" class="icon" alt="Search Icon">
-      <img src="assets/icons/person-outline.svg" (click)="navigateTo('profile')" class="icon" alt="Profile Icon">
+      <img
+        src="assets/icons/search-outline.svg"
+        (click)="navigateTo('search')"
+        class="icon"
+        alt="Search Icon"
+      />
+      <img
+        src="assets/icons/person-outline.svg"
+        (click)="navigateTo('profile')"
+        class="icon"
+        alt="Profile Icon"
+      />
     </div>
 
     <div class="container">
-      <strong>Popular Movies</strong>
-      <!-- Contenido principal de la página de inicio -->
+      <strong class="explore-title" (click)="navigateTo('explore')">Explore Movies</strong>
       <div class="carousel">
         <div class="carousel-inner">
-          <div *ngFor="let movie of popularMovies" (click)="navigateToDetail(movie.id)" class="carousel-item">
+          <div
+            *ngFor="let movie of exploreMovies"
+            (click)="navigateToDetail(movie.id)"
+            class="carousel-item"
+          >
+            <div class="thumbnail">
+              <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
+            </div>
+            <div class="movie-info">
+              <h2><strong>{{ movie.title }}</strong></h2>
+              <p>{{ movie.release_date }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <strong>Popular Movies</strong>
+      <div class="carousel">
+        <div class="carousel-inner">
+          <div
+            *ngFor="let movie of popularMovies"
+            (click)="navigateToDetail(movie.id)"
+            class="carousel-item"
+          >
             <div class="thumbnail">
               <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
             </div>
@@ -23,10 +55,13 @@
       </div>
 
       <strong>Recommended Movies</strong>
-      <!-- Contenido de películas recomendadas -->
       <div class="carousel">
         <div class="carousel-inner">
-          <div *ngFor="let movie of recommendedMovies" (click)="navigateToDetail(movie.id)" class="carousel-item">
+          <div
+            *ngFor="let movie of recommendedMovies"
+            (click)="navigateToDetail(movie.id)"
+            class="carousel-item"
+          >
             <div class="thumbnail">
               <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
             </div>
@@ -41,7 +76,7 @@
 
     <div class="fab-container">
       <button (click)="navigateTo('library')" class="fab-button">
-        <img src="assets/icons/list-outline.svg" class="icon" alt="List Icon">
+        <img src="assets/icons/list-outline.svg" class="icon" alt="List Icon" />
       </button>
     </div>
   </div>

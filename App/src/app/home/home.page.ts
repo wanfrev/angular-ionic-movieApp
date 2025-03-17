@@ -15,12 +15,14 @@ import { FormsModule } from '@angular/forms';
 export class HomePage implements OnInit {
   popularMovies: any[] = [];
   recommendedMovies: any[] = [];
+  exploreMovies: any[] = [];
 
   constructor(private router: Router, private movieService: MovieService) {}
 
   ngOnInit(): void {
     this.getPopularMovies();
     this.getRecommendedMovies();
+    this.getExploreMovies();
   }
 
   getPopularMovies() {
@@ -43,6 +45,18 @@ export class HomePage implements OnInit {
       },
       error: (error) => {
         console.error('Error al obtener películas recomendadas:', error);
+      }
+    });
+  }
+
+  getExploreMovies() {
+    this.movieService.getExploreMovies().subscribe({
+      next: (data) => {
+        this.exploreMovies = data;
+        console.log('Películas para explorar:', this.exploreMovies);
+      },
+      error: (error) => {
+        console.error('Error al obtener películas para explorar:', error);
       }
     });
   }

@@ -1,0 +1,40 @@
+<div class="content">
+  <img
+    src="assets/icons/chevron-back-outline.svg"
+    class="icon"
+    alt="Back Icon"
+    (click)="navigateBack()"
+  />
+
+  <div id="container">
+    <div class="filters">
+      <div class="filter">
+        <label for="year">Year</label>
+        <input type="number" id="year" [(ngModel)]="year" (change)="searchMovies()" placeholder="Year"/>
+      </div>
+      <div class="filter">
+        <label for="genre">Genre</label>
+        <select id="genre" [(ngModel)]="selectedGenre" (change)="searchMovies()">
+          <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
+        </select>
+      </div>
+      <div class="filter">
+        <label for="duration">Duration</label>
+        <input type="range" id="duration" [(ngModel)]="duration" (input)="searchMovies()" min="0" max="300"/>
+        <span>{{ duration }} min</span>
+      </div>
+    </div>
+
+    <div class="movie-grid">
+      <div *ngFor="let movie of movies" class="movie-card" (click)="openMovieDetail(movie.id)">
+        <div class="thumbnail">
+          <img [src]="movie.image" alt="{{ movie.title }}"/>
+        </div>
+        <div class="movie-info">
+          <h2>{{ movie.title }}</h2>
+          <p>{{ movie.release_date | date:'yyyy' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -21,14 +21,14 @@ interface Genre {
 }
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.page.html',
-  styleUrls: ['./search.page.scss'],
+  selector: 'app-explore',
+  templateUrl: './explore.page.html',
+  styleUrls: ['./explore.page.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class SearchPage implements OnInit {
+export class ExplorePage implements OnInit {
   searchQuery: string = '';
   movies: Movie[] = [];
   genres: Genre[] = [];
@@ -36,20 +36,42 @@ export class SearchPage implements OnInit {
   year: number | undefined = undefined;
   duration: number = 0;
 
-  constructor(private router: Router, private movieService: MovieService, private location: Location) { }
+  constructor(
+    private router: Router,
+    private movieService: MovieService,
+    private location: Location
+  ) {}
 
   ngOnInit() {
     this.getGenres();
+    this.getExploreMovies();
   }
 
   getGenres() {
-    this.movieService.getGenres().subscribe((genres: any) => {
+    this.movieService.getGenres().subscribe((genres: Genre[]) => {
       this.genres = genres;
     });
   }
 
+  getExploreMovies() {
+    this.movieService.getExploreMovies().subscribe((results: any[]) => {
+      const today = new Date();
+      this.movies = results
+        .filter((movie: any) => new Date(movie.release_date) <= today)
+        .map((movie: any) => ({
+          id: movie.id,
+          title: movie.title,
+          description: movie.overview,
+          image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+          genre: movie.genre_ids.map((id: number) => this.genres.find(g => g.id === id)?.name).join(', '),
+          runtime: movie.runtime,
+          release_date: movie.release_date
+        }));
+    });
+  }
+
   searchMovies() {
-    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe(results => {
+    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe((results: any[]) => {
       this.movies = results.map((movie: any) => ({
         id: movie.id,
         title: movie.title,

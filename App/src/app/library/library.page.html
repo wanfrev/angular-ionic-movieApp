@@ -1,21 +1,48 @@
-<ion-content [fullscreen]="true">
-  <img
-    src="assets/icons/chevron-back-outline.svg"
-    class="icon"
-    alt="Back Icon"
-    (click)="navigateBack()"
-  />
+<div class="content">
+  <div class="header">
+    <img
+      src="assets/icons/chevron-back-outline.svg"
+      class="icon"
+      alt="Back Icon"
+      (click)="navigateBack()"
+    />
+    <button (click)="openAddModal()" class="add-button">+</button>
+  </div>
+
+  <!-- Modal para agregar -->
+  <div id="addListModal" class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closeAddModal()">&times;</span>
+      <form (submit)="submitAddForm($event)">
+        <label for="listName">Nombre de la lista:</label>
+        <input type="text" id="listName" name="listName" required>
+        <button type="submit" class="submit-button">Agregar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para editar -->
+  <div id="editListModal" class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closeEditModal()">&times;</span>
+      <form (submit)="submitEditForm($event)">
+        <input type="hidden" id="editIndex" name="editIndex">
+        <label for="editListName">Nombre de la lista:</label>
+        <input type="text" id="editListName" name="editListName" required>
+        <button type="submit" class="submit-button">Guardar</button>
+      </form>
+    </div>
+  </div>
 
   <div id="container">
-    <strong>Library</strong>
-    <p>
-      Start with Ionic
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://ionicframework.com/docs/components"
-        >UI Components</a
-      >
-    </p>
+    <div *ngFor="let list of movieLists; let i = index">
+      <div class="list-item">
+        {{ list.name }}
+        <div class="buttons">
+          <button (click)="openEditModal(i, $event)" class="edit-button">Editar</button>
+          <button (click)="deleteList(list)" class="delete-button">Eliminar</button>
+        </div>
+      </div>
+    </div>
   </div>
-</ion-content>
+</div>
