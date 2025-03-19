@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,9 +17,12 @@ interface MovieList {
 export class LibraryPage implements OnInit {
   movieLists: MovieList[] = [];
 
-  constructor(private router: Router, private renderer: Renderer2) { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+    // Asegúrate de que los modales estén ocultos al iniciar
+    this.closeAddModal();
+    this.closeEditModal();
   }
 
   navigateBack() {
@@ -29,7 +32,7 @@ export class LibraryPage implements OnInit {
   openAddModal() {
     const modal = document.getElementById('addListModal');
     if (modal) {
-      modal.style.display = 'block';
+      modal.style.display = 'flex';
     }
   }
 
@@ -65,8 +68,8 @@ export class LibraryPage implements OnInit {
       const listItem = target.closest('.list-item') as HTMLElement;
       if (listItem) {
         const rect = listItem.getBoundingClientRect();
-        this.renderer.setStyle(modal, 'top', `${rect.bottom + window.scrollY}px`);
-        this.renderer.setStyle(modal, 'left', `${rect.right + window.scrollX - 300}px`);
+        modal.style.top = `${rect.bottom + window.scrollY}px`;
+        modal.style.left = `${rect.left + window.scrollX}px`;
       }
     }
   }

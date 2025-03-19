@@ -139,11 +139,13 @@ strong {
   text-overflow: ellipsis;
 }
 
-/* Botón FAB */
 .fab-container {
   position: fixed;
   bottom: 16px;
   right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .fab-button {

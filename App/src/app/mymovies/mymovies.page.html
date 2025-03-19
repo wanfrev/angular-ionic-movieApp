@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mis Películas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="content">
+    <div class="header">
+      <img
+        src="assets/icons/chevron-back-outline.svg"
+        class="icon"
+        alt="Back Icon"
+        (click)="navigateBack()"
+      />
+      <button (click)="openAddModal()" class="add-button">+</button>
+    </div>
+
+    <!-- Modal para agregar -->
+    <div id="addMovieModal" class="modal">
+      <div class="modal-content">
+        <span class="close" (click)="closeAddModal()">&times;</span>
+        <form (submit)="submitAddForm($event)">
+          <label for="movieName">Nombre de la película:</label>
+          <input type="text" id="movieName" name="movieName" required>
+          <button type="submit" class="submit-button">Agregar</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="container">
+      <div class="movie-grid">
+        <div *ngFor="let movie of myMovies; let i = index" class="movie-card">
+          <div class="thumbnail">
+            <img [src]="movie.poster_path" alt="{{ movie.title }}">
+          </div>
+          <div class="movie-info">
+            <h2><strong>{{ movie.title }}</strong></h2>
+            <p>{{ movie.release_date }}</p>
+          </div>
+          <div class="buttons">
+            <button (click)="deleteMovie(movie)" class="delete-button">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
