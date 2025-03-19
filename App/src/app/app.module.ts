@@ -1,4 +1,3 @@
-// filepath: c:\Users\wanfr\OneDrive\Documentos\Computer-Engineering\URU\Moviles\movieApp\App\src\app\app.module.ts
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -8,21 +7,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicFeatureModule } from './ionic.module';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
-import { CommonModule } from '@angular/common'; // Importa CommonModule
-import { MovieDetailPage } from './detail-movie/detail-movie.page'; // Importa MovieDetailPage
+import { CommonModule } from '@angular/common';
+import { MovieDetailPage } from './detail-movie/detail-movie.page';
 
 @NgModule({
-  declarations: [AppComponent, MovieDetailPage], // Declara MovieDetailPage
+  declarations: [AppComponent, MovieDetailPage],
   imports: [
     BrowserModule,
-    HttpClientModule,
+    HttpClientModule, // HttpClientModule MUST be here
     IonicModule.forRoot(),
     IonicFeatureModule,
     RouterModule.forRoot(routes, { useHash: true }),
-    CommonModule // Agrega CommonModule aquí
+    CommonModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA] // Agrega esta línea
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

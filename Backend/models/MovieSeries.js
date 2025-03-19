@@ -4,20 +4,19 @@ const movieSchema = new mongoose.Schema({
   externalId: {
     type: String,
     required: true,
-    unique: true, // Unique ID from the external API
+    unique: true,
   },
   title: {
     type: String,
     required: true,
   },
-  originalTitle:{
+  originalTitle: {
     type: String,
     required: true,
   },
   categories: {
     type: [String],
     required: true,
-    // Example: ['Action', 'Drama', 'Mystery', 'Sci-Fi']
   },
   releaseDate: {
     type: Date,
@@ -28,14 +27,14 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   cast: {
-    type: [String], // Array of actor names
+    type: [String],
     default: [],
   },
   imageUrl: {
-    type: String, // URL to the movie poster
+    type: String,
   },
   otherImages: {
-    type: [String], // Array of URLs to other images
+    type: [String],
     default: [],
   },
   averageRating: {
@@ -48,15 +47,23 @@ const movieSchema = new mongoose.Schema({
   },
   numberOfRatings: {
     type: Number,
-    default: 0
+    default: 0,
   },
   numberOfCriticRatings: {
     type: Number,
-    default: 0
+    default: 0,
   },
   type: {
     type: String,
     enum: ['movie', 'series'],
+    required: true,
+  },
+  director: {
+    type: String,
+    required: true,
+  },
+  duration: {
+    type: Number,
     required: true,
   },
   createdAt: {
@@ -65,8 +72,8 @@ const movieSchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 const Movie = mongoose.model('Movie', movieSchema);

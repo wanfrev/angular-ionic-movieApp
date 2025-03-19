@@ -1,7 +1,6 @@
 const axios = require('axios');
-
-const apiUrl = 'https://api.themoviedb.org/3';
-const apiKey = '64d148b6a9644b7ea9ae5b72c887014a'; // Reemplaza con tu clave de API
+const Movie = require('../models/MovieSeries');
+const { apiUrl, apiKey } = require('../config');
 
 const getPopularMovies = async () => {
   const response = await axios.get(`${apiUrl}/movie/popular`, {
@@ -31,8 +30,15 @@ const getMovieDetails = async (movieId) => {
   return response.data;
 };
 
+const createMovie = async (movieData) => {
+  const movie = new Movie(movieData);
+  await movie.save();
+  return movie;
+};
+
 module.exports = {
   getPopularMovies,
   searchMovies,
-  getMovieDetails
+  getMovieDetails,
+  createMovie,
 };

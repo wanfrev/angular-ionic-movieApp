@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 interface Movie {
   title: string;
-  release_date: string;
-  poster_path: string;
+  releaseDate: string;
+  imageUrl: string;
+  synopsis: string;
+  director: string;
+  duration: number;
+  averageRating: number;
 }
 
 @Component({
@@ -14,20 +19,21 @@ interface Movie {
   templateUrl: './mymovies.page.html',
   styleUrls: ['./mymovies.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, CommonModule, FormsModule, HttpClientModule]
 })
 export class MymoviesPage implements OnInit {
   myMovies: Movie[] = [];
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    // Inicializar con algunas películas de ejemplo
-    this.myMovies = [
-      { title: 'Movie 1', release_date: '2022-01-01', poster_path: 'https://via.placeholder.com/200x300' },
-      { title: 'Movie 2', release_date: '2022-02-01', poster_path: 'https://via.placeholder.com/200x300' },
-      { title: 'Movie 3', release_date: '2022-03-01', poster_path: 'https://via.placeholder.com/200x300' }
-    ];
+    this.loadMovies();
+  }
+
+  loadMovies() {
+    this.http.get<Movie[]>('/api/movies').subscribe(movies => {
+      this.myMovies = movies;
+    });
   }
 
   navigateBack() {
@@ -51,14 +57,15 @@ export class MymoviesPage implements OnInit {
 
   submitAddForm(event: Event) {
     event.preventDefault();
-    const input = (event.target as HTMLFormElement).elements.namedItem('movieName') as HTMLInputElement;
-    const name = input.value;
+    const form = event.target as HTMLFormElement;
+    const formData = new FormData(form);
 
-    if (name) {
-      // Agregar una película de ejemplo
-      this.myMovies.push({ title: name, release_date: '2022-04-01', poster_path: 'https://via.placeholder.com/200x300' });
+    this.http.post<Movie>('http://localhost:5000/api/movies/create', formData).subscribe(movie => {
+      this.myMovies.push(movie);
       this.closeAddModal();
-    }
+    }, error => {
+      console.error('Error al agregar la película:', error);
+    });
   }
 
   deleteMovie(movie: Movie) {

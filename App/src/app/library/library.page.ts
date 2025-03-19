@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LibraryService } from '../services/library.service';
 
 interface MovieList {
+  _id?: string;
   name: string;
+  movies?: string[];
 }
 
 @Component({
@@ -17,12 +20,18 @@ interface MovieList {
 export class LibraryPage implements OnInit {
   movieLists: MovieList[] = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private libraryService: LibraryService) { }
 
   ngOnInit() {
-    // Asegúrate de que los modales estén ocultos al iniciar
+    this.loadLibraries();
     this.closeAddModal();
     this.closeEditModal();
+  }
+
+  loadLibraries() {
+    this.libraryService.getLibraries().subscribe(libraries => {
+      this.movieLists = libraries;
+    });
   }
 
   navigateBack() {
@@ -49,8 +58,10 @@ export class LibraryPage implements OnInit {
     const name = input.value;
 
     if (name) {
-      this.movieLists.push({ name });
-      this.closeAddModal();
+      this.libraryService.createLibrary({ name }).subscribe(library => {
+        this.movieLists.push(library);
+        this.closeAddModal();
+      });
     }
   }
 

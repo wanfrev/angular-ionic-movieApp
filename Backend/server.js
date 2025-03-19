@@ -4,6 +4,8 @@ const cors = require('cors');
 const path = require('path');
 const connectDB = require('./db/db');
 const routes = require('./routes/index');
+const movieRoutes = require('./routes/movieRoutes');
+const libraryRoutes = require('./routes/libraryRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 // Conectar a la base de datos
@@ -18,6 +20,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir 
 
 // Usar las rutas
 app.use('/api', routes);
+app.use('/api/movies', movieRoutes);
+app.use('/api/libraries', libraryRoutes);
 
 // Manejar rutas no encontradas
 app.use((req, res, next) => {
