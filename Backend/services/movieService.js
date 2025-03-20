@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Movie = require('../models/MovieSeries');
+const Movie = require('../models/Movies');
 const { apiUrl, apiKey } = require('../config');
 
 const getPopularMovies = async () => {
@@ -9,9 +9,8 @@ const getPopularMovies = async () => {
         api_key: apiKey
       }
     });
-    return response.data.results; // Asegúrate de devolver un array
+    return response.data.results;
   } catch (error) {
-    console.error('Error al obtener películas populares:', error.response?.data || error.message);
     throw new Error('Error al obtener películas populares');
   }
 };
@@ -23,9 +22,8 @@ const getRecommendedMovies = async () => {
         api_key: apiKey
       }
     });
-    return response.data.results; // Asegúrate de devolver un array
+    return response.data.results;
   } catch (error) {
-    console.error('Error al obtener películas recomendadas:', error.response?.data || error.message);
     throw new Error('Error al obtener películas recomendadas');
   }
 };
@@ -37,9 +35,8 @@ const getExploreMovies = async () => {
         api_key: apiKey
       }
     });
-    return response.data.results; // Asegúrate de devolver un array
+    return response.data.results;
   } catch (error) {
-    console.error('Error al obtener películas para explorar:', error.response?.data || error.message);
     throw new Error('Error al obtener películas para explorar');
   }
 };
@@ -52,9 +49,8 @@ const searchMovies = async (query) => {
         query: query
       }
     });
-    return response.data.results; // Asegúrate de devolver un array
+    return response.data.results;
   } catch (error) {
-    console.error('Error al buscar películas:', error.response?.data || error.message);
     throw new Error('Error al buscar películas');
   }
 };
@@ -68,7 +64,6 @@ const getMovieDetails = async (movieId) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error al obtener detalles de la película:', error.response?.data || error.message);
     throw new Error('Error al obtener detalles de la película');
   }
 };

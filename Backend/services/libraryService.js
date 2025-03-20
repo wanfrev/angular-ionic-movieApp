@@ -1,36 +1,35 @@
 const Library = require('../models/Library');
-const Movie = require('../models/MovieSeries');
+const Movie = require('../models/Movies');
 
-const createLibrary = async (libraryData) => {
-  const library = new Library(libraryData);
-  await library.save();
-  return library;
+const createLibrary = async (libraryData, userId) => {
+    const library = new Library({ ...libraryData, user: userId });
+    await library.save();
+    return library;
 };
 
-const addMovieToLibrary = async (libraryId, movieId) => {
-  const library = await Library.findById(libraryId);
-  const movie = await Movie.findById(movieId);
+const addMovieToLibrary = async (libraryId, movieId, userId) => {
+    const library = await Library.findOne({ _id: libraryId, user: userId });
+    if (!library) throw new Error('No tienes permiso para modificar esta lista');
 
-  if (!library || !movie) {
-    throw new Error('Library or Movie not found');
-  }
+    const movie = await Movie.findById(movieId);
+    if (!movie) throw new Error('Película no encontrada');
 
-  library.movies.push(movie);
-  await library.save();
-  return library;
+    library.movies.push(movie);
+    await library.save();
+    return library;
 };
 
-const getLibraries = async () => {
-  return await Library.find().populate('movies');
+const getLibraries = async (userId) => {
+    return await Library.find({ user: userId }).populate('movies');
 };
 
-const getLibraryById = async (libraryId) => {
-  return await Library.findById(libraryId).populate('movies');
+const getLibraryById = async (libraryId, userId) => {
+    return await Library.findOne({ _id: libraryId, user: userId }).populate('movies');
 };
 
 module.exports = {
-  createLibrary,
-  addMovieToLibrary,
-  getLibraries,
-  getLibraryById,
+    createLibrary,
+    addMovieToLibrary,
+    getLibraries,
+    getLibraryById,
 };
