@@ -41,7 +41,7 @@ export class HomePage implements OnInit {
   getRecommendedMovies() {
     this.movieService.getRecommendedMovies().subscribe({
       next: (data) => {
-        this.recommendedMovies = data;
+        this.recommendedMovies = data.results;
         console.log('Películas recomendadas:', this.recommendedMovies);
       },
       error: (error) => {
@@ -53,7 +53,7 @@ export class HomePage implements OnInit {
   getExploreMovies() {
     this.movieService.getExploreMovies().subscribe({
       next: (data) => {
-        this.exploreMovies = data;
+        this.exploreMovies = data.results;
         console.log('Películas para explorar:', this.exploreMovies);
       },
       error: (error) => {

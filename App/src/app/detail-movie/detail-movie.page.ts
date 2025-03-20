@@ -14,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MovieDetailPage implements OnInit {
-  movie: any;
+  movie: any = {}; // Inicializa como un objeto vacío
   director: string | null = null; // Agregamos una propiedad para el director
 
   constructor(

@@ -10,7 +10,26 @@ router.get('/popular', async (req, res) => {
     const movies = await getPopularMovies();
     res.json(movies);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener las películas populares' });
+    console.error('Error al obtener las películas populares:', error.message);
+    res.status(500).json({ message: 'Error al obtener las películas populares', error: error.message });
+  }
+});
+
+router.get('/top_rated', async (req, res) => {
+  try {
+    const movies = await movieService.getRecommendedMovies();
+    res.json(movies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get('/discover', async (req, res) => {
+  try {
+    const movies = await movieService.getExploreMovies();
+    res.json(movies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
@@ -20,7 +39,8 @@ router.get('/search', async (req, res) => {
     const movies = await searchMovies(query);
     res.json(movies);
   } catch (error) {
-    res.status(500).json({ message: 'Error al buscar películas' });
+    console.error('Error al buscar películas:', error.message);
+    res.status(500).json({ message: 'Error al buscar películas', error: error.message });
   }
 });
 
@@ -30,7 +50,8 @@ router.get('/:id', async (req, res) => {
     const movie = await getMovieDetails(movieId);
     res.json(movie);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los detalles de la película' });
+    console.error('Error al obtener los detalles de la película:', error.message);
+    res.status(500).json({ message: 'Error al obtener los detalles de la película', error: error.message });
   }
 });
 
@@ -43,7 +64,8 @@ router.post('/create', upload.single('image'), async (req, res) => {
     const movie = await createMovie(movieData);
     res.status(201).json(movie);
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear la película' });
+    console.error('Error al crear la película:', error.message);
+    res.status(500).json({ message: 'Error al crear la película', error: error.message });
   }
 });
 

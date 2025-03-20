@@ -1,37 +1,39 @@
-<div class="content">
-  <img
-    src="assets/icons/chevron-back-outline.svg"
-    class="icon"
-    alt="Back Icon"
-    (click)="navigateBack()"
-  />
-  <div
-    class="background-blur"
-    [style.background-image]="'url(https://image.tmdb.org/t/p/w500' + movie.poster_path + ')'"
-  ></div>
-  <div class="container">
-    <h1 class="card-title">{{ movie.title }}</h1>
-    <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
-    <div class="card-header">
-      <div class="card-subtitle">
-        <strong>Release Date:</strong>
-        <span>{{ movie.release_date }}</span>
+<ng-container *ngIf="movie">
+  <div class="content">
+    <img
+      src="assets/icons/chevron-back-outline.svg"
+      class="icon"
+      alt="Back Icon"
+      (click)="navigateBack()"
+    />
+    <div
+      class="background-blur"
+      [style.background-image]="'url(https://image.tmdb.org/t/p/w500' + movie.poster_path + ')'"
+    ></div>
+    <div class="container">
+      <h1 class="card-title">{{ movie.title }}</h1>
+      <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" />
+      <div class="card-header">
+        <div class="card-subtitle">
+          <strong>Release Date:</strong>
+          <span>{{ movie.release_date }}</span>
+        </div>
+        <div class="card-subtitle">
+          <strong>Director:</strong>
+          <span>{{ director }}</span>
+        </div>
+        <div class="card-subtitle">
+          <strong>Duration:</strong>
+          <span>{{ movie.runtime }} min</span>
+        </div>
+        <div class="card-subtitle">
+          <strong>Rating:</strong>
+          <span>{{ movie.vote_average }} / 10</span>
+        </div>
       </div>
-      <div class="card-subtitle">
-        <strong>Director:</strong>
-        <span>{{ director }}</span>
+      <div class="card-content">
+        <p>{{ movie.overview }}</p>
       </div>
-      <div class="card-subtitle">
-        <strong>Duration:</strong>
-        <span>{{ movie.runtime }} min</span>
-      </div>
-      <div class="card-subtitle">
-        <strong>Rating:</strong>
-        <span>{{ movie.vote_average }} / 10</span>
-      </div>
-    </div>
-    <div class="card-content">
-      <p>{{ movie.overview }}</p>
     </div>
   </div>
-</div>
+</ng-container>

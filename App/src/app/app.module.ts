@@ -14,7 +14,7 @@ import { MovieDetailPage } from './detail-movie/detail-movie.page';
   declarations: [AppComponent, MovieDetailPage],
   imports: [
     BrowserModule,
-    HttpClientModule, // HttpClientModule MUST be here
+    HttpClientModule,
     IonicModule.forRoot(),
     IonicFeatureModule,
     RouterModule.forRoot(routes, { useHash: true }),

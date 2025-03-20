@@ -13,8 +13,14 @@ connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const localIp = process.env.LOCAL_IP || 'localhost';
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:4200', 'http://localhost:8100'], // Agregar ambos orígenes
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir archivos estáticos
 
@@ -33,5 +39,5 @@ app.use(errorHandler);
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://${localIp}:${PORT}`);
 });
