@@ -1,13 +1,12 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Detalle</ion-title>
-  </ion-toolbar>
-</ion-header>
+<header>
+  <div class="toolbar">
+    <button class="back-button" (click)="navigateBack()">Atrás</button>
+    <h1>Detalle</h1>
+    <button class="add-to-library-button" (click)="openAddToLibraryModal()">Agregar a Biblioteca</button>
+  </div>
+</header>
 
-<ion-content *ngIf="movie" class="ion-padding">
+<main *ngIf="movie" class="ion-padding">
   <div class="poster-container" *ngIf="movie.poster_path">
     <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title">
   </div>
@@ -18,10 +17,25 @@
   <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date || 'Desconocida' }}</p>
   <p><strong>Popularidad:</strong> {{ movie.popularity || 'No disponible' }}</p>
   <p><strong>Votos:</strong> {{ movie.vote_count }} (promedio: {{ movie.vote_average }})</p>
-</ion-content>
+</main>
 
-<ion-content *ngIf="errorMessage">
-  <ion-text color="danger">
-    <p>{{ errorMessage }}</p>
-  </ion-text>
-</ion-content>
+<div *ngIf="errorMessage" class="error-message">
+  <p>{{ errorMessage }}</p>
+</div>
+
+<!-- Modal para agregar a biblioteca -->
+<div class="modal" [class.open]="isAddToLibraryModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Agregar a Biblioteca</h2>
+      <button class="close-button" (click)="closeAddToLibraryModal()">Cerrar</button>
+    </div>
+    <div class="modal-body">
+      <ul>
+        <li *ngFor="let library of libraries" (click)="addToLibrary(library._id)">
+          {{ library.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

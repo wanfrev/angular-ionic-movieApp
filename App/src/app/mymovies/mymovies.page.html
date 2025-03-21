@@ -1,59 +1,53 @@
-<ion-content [fullscreen]="true">
-  <div class="content">
-    <div class="header">
-      <img
-        src="assets/icons/chevron-back-outline.svg"
-        class="icon"
-        alt="Back Icon"
-        (click)="navigateBack()"
-      />
-      <button (click)="openAddModal()" class="add-button">+</button>
-    </div>
+<h2>Agregar Película</h2>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+<form (ngSubmit)="createMovie()">
+  <label for="title">Título</label>
+  <input type="text" id="title" [(ngModel)]="newMovie.title" name="title" required />
 
-    <!-- Modal para agregar -->
-    <div *ngIf="showModal" class="modal">
-      <div class="modal-content">
-        <span class="close" (click)="closeAddModal()">&times;</span>
-        <form (submit)="submitAddForm($event)">
-          <label for="movieTitle">Título:</label>
-          <input type="text" id="movieTitle" [(ngModel)]="newMovie.title" required>
+  <label for="originalTitle">Título Original</label>
+  <input type="text" id="originalTitle" [(ngModel)]="newMovie.originalTitle" name="originalTitle" required />
 
-          <label for="movieSynopsis">Sinopsis:</label>
-          <textarea id="movieSynopsis" [(ngModel)]="newMovie.synopsis" required></textarea>
+  <label for="categories">Categorías (separadas por coma)</label>
+  <input type="text" id="categories" [(ngModel)]="newMovie.categories" name="categories" />
 
-          <label for="movieReleaseDate">Fecha de lanzamiento:</label>
-          <input type="date" id="movieReleaseDate" [(ngModel)]="newMovie.releaseDate" required>
+  <label for="releaseDate">Fecha de Estreno</label>
+  <input type="date" id="releaseDate" [(ngModel)]="newMovie.releaseDate" name="releaseDate" />
 
-          <label for="movieDirector">Director:</label>
-          <input type="text" id="movieDirector" [(ngModel)]="newMovie.director" required>
+  <label for="synopsis">Sinopsis</label>
+  <textarea id="synopsis" [(ngModel)]="newMovie.synopsis" name="synopsis"></textarea>
 
-          <label for="movieDuration">Duración (min):</label>
-          <input type="number" id="movieDuration" [(ngModel)]="newMovie.duration">
+  <label for="cast">Reparto (separado por coma)</label>
+  <input type="text" id="cast" [(ngModel)]="newMovie.cast" name="cast" />
 
-          <label for="movieImage">Imagen:</label>
-          <input type="file" id="movieImage" (change)="onImageSelected($event)">
+  <label for="director">Director</label>
+  <input type="text" id="director" [(ngModel)]="newMovie.director" name="director" required />
 
-          <button type="submit">Agregar Película</button>
-        </form>
-      </div>
-    </div>
+  <label for="duration">Duración (minutos)</label>
+  <input type="number" id="duration" [(ngModel)]="newMovie.duration" name="duration" required />
 
-    <!-- Lista de películas -->
-    <div *ngIf="myMovies.length > 0; else noMovies" class="movie-grid">
-      <div *ngFor="let movie of myMovies" class="movie-card">
-        <img *ngIf="movie.imageUrl" [src]="movie.imageUrl" [alt]="movie.title">
-        <h3>{{ movie.title }}</h3>
-        <p>{{ movie.synopsis }}</p>
-        <button class="delete-button" (click)="deleteMovie(movie._id)">🗑️</button>
-      </div>
-    </div>
+  <label for="type">Tipo</label>
+  <select id="type" [(ngModel)]="newMovie.type" name="type" required>
+    <option value="movie">Película</option>
+    <option value="series">Serie</option>
+  </select>
 
-    <ng-template #noMovies>
-      <p>No tienes películas agregadas.</p>
-    </ng-template>
+  <label for="image">Imagen (poster)</label>
+  <input type="file" id="image" (change)="onImageSelected($event)" />
+
+  <div *ngIf="imageFile">
+    <p>Vista previa:</p>
+    <img [src]="imagePreview()" alt="Poster" style="max-width: 100%; height: auto;" />
   </div>
-</ion-content>
+
+  <button type="submit">Crear Película</button>
+</form>
+
+<hr />
+
+<h3>Mis Películas</h3>
+<div *ngFor="let movie of myMovies" style="margin-bottom: 20px;">
+  <img *ngIf="movie.imageUrl" [src]="movie.imageUrl" alt="{{ movie.title }}" width="200" />
+  <h4>{{ movie.title }}</h4>
+  <p><strong>Director:</strong> {{ movie.director }}</p>
+  <p><strong>Fecha:</strong> {{ movie.releaseDate }}</p>
+</div>

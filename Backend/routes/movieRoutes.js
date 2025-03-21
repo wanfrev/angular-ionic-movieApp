@@ -85,11 +85,11 @@ router.get('/user-movies', authMiddleware, async (req, res) => {
 router.post('/create', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const movieData = req.body;
-    movieData.user = req.user.id;
-    if (req.file) {
-      movieData.imageUrl = `/uploads/${req.file.filename}`;
-    }
-    const movie = await createMovie(movieData);
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+      : '';
+
+    const movie = await createMovie({ ...movieData, imageUrl }, req.user.id);
     res.status(201).json(movie);
   } catch (error) {
     res.status(500).json({ message: 'Error al crear la película', error: error.message });

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LibraryService } from '../services/library.service';
+import { HttpClientModule } from '@angular/common/http';
 
 interface MovieList {
   _id?: string;
@@ -15,7 +16,7 @@ interface MovieList {
   templateUrl: './library.page.html',
   styleUrls: ['./library.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, HttpClientModule]
 })
 export class LibraryPage implements OnInit {
   movieLists: MovieList[] = [];
@@ -29,7 +30,7 @@ export class LibraryPage implements OnInit {
   }
 
   loadLibraries() {
-    this.libraryService.getLibraries().subscribe(libraries => {
+    this.libraryService.getLibraries().subscribe((libraries: MovieList[]) => {
       this.movieLists = libraries;
     });
   }
@@ -58,7 +59,7 @@ export class LibraryPage implements OnInit {
     const name = input.value;
 
     if (name) {
-      this.libraryService.createLibrary({ name }).subscribe(library => {
+      this.libraryService.createLibrary({ name }).subscribe((library: MovieList) => {
         this.movieLists.push(library);
         this.closeAddModal();
       });

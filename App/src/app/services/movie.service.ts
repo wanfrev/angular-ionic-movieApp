@@ -47,4 +47,19 @@ export class MovieService {
   getGenres(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/genres`, { withCredentials: true });
   }
+
+  createMovie(movieData: any, imageFile: File): Observable<any> {
+    const formData = new FormData();
+    for (const key in movieData) {
+      formData.append(key, movieData[key]);
+    }
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+
+    return this.http.post(`${this.apiUrl}/create`, formData, {
+      withCredentials: true,
+    });
+  }
+
 }
