@@ -36,34 +36,36 @@ export class SearchPage implements OnInit {
   year: number | undefined = undefined;
   duration: number = 0;
 
-  constructor(private router: Router, private movieService: MovieService, private location: Location) { }
+  constructor(public router: Router, private movieService: MovieService, private location: Location) { }
 
   ngOnInit() {
     this.getGenres();
   }
 
   getGenres() {
-    this.movieService.getGenres().subscribe((genres: any) => {
-      this.genres = genres;
+    this.movieService.getGenres().subscribe({
+      next: (genres: Genre[]) => {
+        this.genres = genres;
+      },
+      error: (error: any) => {
+        console.error('Error al obtener géneros:', error);
+      }
     });
   }
 
   searchMovies() {
-    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe(results => {
-      this.movies = results.map((movie: any) => ({
-        id: movie.id,
-        title: movie.title,
-        description: movie.overview,
-        image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        genre: movie.genre_ids.map((id: number) => this.genres.find(g => g.id === id)?.name).join(', '),
-        runtime: movie.runtime,
-        release_date: movie.release_date
-      }));
+    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe({
+      next: (movies: Movie[]) => {
+        this.movies = movies;
+      },
+      error: (error: any) => {
+        console.error('Error al buscar películas:', error);
+      }
     });
   }
 
-  openMovieDetail(movieId: number) {
-    this.router.navigate(['/detail-movie', movieId]);
+  goToDetail(id: number) {
+    this.router.navigate(['/detail', id]);
   }
 
   navigateBack() {

@@ -37,7 +37,7 @@ export class ExplorePage implements OnInit {
   duration: number = 0;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private movieService: MovieService,
     private location: Location
   ) {}
@@ -48,44 +48,40 @@ export class ExplorePage implements OnInit {
   }
 
   getGenres() {
-    this.movieService.getGenres().subscribe((genres: Genre[]) => {
-      this.genres = genres;
+    this.movieService.getGenres().subscribe({
+      next: (genres: Genre[]) => {
+        this.genres = genres;
+      },
+      error: (error: any) => {
+        console.error('Error al obtener géneros:', error);
+      }
     });
   }
 
   getExploreMovies() {
-    this.movieService.getExploreMovies().subscribe((results: any[]) => {
-      const today = new Date();
-      this.movies = results
-        .filter((movie: any) => new Date(movie.release_date) <= today)
-        .map((movie: any) => ({
-          id: movie.id,
-          title: movie.title,
-          description: movie.overview,
-          image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-          genre: movie.genre_ids.map((id: number) => this.genres.find(g => g.id === id)?.name).join(', '),
-          runtime: movie.runtime,
-          release_date: movie.release_date
-        }));
+    this.movieService.getExploreMovies().subscribe({
+      next: (movies: Movie[]) => {
+        this.movies = movies;
+      },
+      error: (error: any) => {
+        console.error('Error al obtener películas por explorar:', error);
+      }
     });
   }
 
   searchMovies() {
-    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe((results: any[]) => {
-      this.movies = results.map((movie: any) => ({
-        id: movie.id,
-        title: movie.title,
-        description: movie.overview,
-        image: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        genre: movie.genre_ids.map((id: number) => this.genres.find(g => g.id === id)?.name).join(', '),
-        runtime: movie.runtime,
-        release_date: movie.release_date
-      }));
+    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe({
+      next: (movies: Movie[]) => {
+        this.movies = movies;
+      },
+      error: (error: any) => {
+        console.error('Error al buscar películas:', error);
+      }
     });
   }
 
-  openMovieDetail(movieId: number) {
-    this.router.navigate(['/detail-movie', movieId]);
+  goToDetail(id: number) {
+    this.router.navigate(['/detail-movie', id]);
   }
 
   navigateBack() {

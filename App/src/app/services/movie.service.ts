@@ -1,14 +1,14 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { LibraryService } from './library.service'; // Asegúrate de importar LibraryService si es necesario
+import { LibraryService } from './library.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
-  private apiUrl = 'http://localhost:5000/api/movies'; // URL base del backend
-  private libraryService!: LibraryService; // Usar el operador ! para indicar que será inicializada más tarde
+  private apiUrl = 'http://localhost:5000/api/movies';
+  private libraryService!: LibraryService;
 
   constructor(private http: HttpClient, private injector: Injector) {
     setTimeout(() => {
@@ -17,40 +17,34 @@ export class MovieService {
   }
 
   getPopularMovies(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/popular`);
+    return this.http.get<any>(`${this.apiUrl}/popular`, { withCredentials: true });
   }
 
   getRecommendedMovies(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/top_rated`);
+    return this.http.get<any>(`${this.apiUrl}/top_rated`, { withCredentials: true });
   }
 
   getExploreMovies(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/discover`);
+    return this.http.get<any>(`${this.apiUrl}/discover`, { withCredentials: true });
   }
 
   searchMovies(query: string, genre?: number, year?: number, duration?: number): Observable<any> {
     const params: any = { query };
+    if (genre !== undefined) params.genre = genre;
+    if (year !== undefined) params.year = year;
+    if (duration !== undefined) params.duration = duration;
 
-    if (genre !== undefined) {
-      params.genre = genre;
-    }
-
-    if (year !== undefined) {
-      params.year = year;
-    }
-
-    if (duration !== undefined) {
-      params.duration = duration;
-    }
-
-    return this.http.get<any>(`${this.apiUrl}/search`, { params });
-  }
-
-  getGenres(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/genres`);
+    return this.http.get<any>(`${this.apiUrl}/search`, {
+      params,
+      withCredentials: true
+    });
   }
 
   getMovieDetails(movieId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${movieId}`);
+    return this.http.get<any>(`${this.apiUrl}/${movieId}`, { withCredentials: true });
+  }
+
+  getGenres(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/genres`, { withCredentials: true });
   }
 }

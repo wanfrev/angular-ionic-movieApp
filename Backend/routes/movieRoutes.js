@@ -1,5 +1,14 @@
 const express = require('express');
-const { getPopularMovies, searchMovies, getMovieDetails, createMovie } = require('../services/movieService');
+const {
+  getPopularMovies,
+  searchMovies,
+  getMovieDetails,
+  createMovie,
+  getRecommendedMovies,
+  getExploreMovies,
+  getGenres
+} = require('../services/movieService');
+
 const multer = require('multer');
 const authMiddleware = require('../middlewares/authMiddleware');
 const router = express.Router();
@@ -52,6 +61,16 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ message: 'Error al obtener detalles de la película', error: error.message });
   }
 });
+
+router.get('/genres', async (req, res) => {
+  try {
+    const genres = await getGenres();
+    res.json(genres);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los géneros', error: error.message });
+  }
+});
+
 
 // Ruta para obtener solo las películas del usuario autenticado
 router.get('/user-movies', authMiddleware, async (req, res) => {

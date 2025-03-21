@@ -36,7 +36,7 @@
 
   <div id="container">
     <div *ngFor="let list of movieLists; let i = index">
-      <div class="list-item">
+      <div class="list-item" (click)="navigateToLibraryDetail(list._id)">
         {{ list.name }}
         <div class="buttons">
           <button (click)="openEditModal(i, $event)" class="edit-button">Editar</button>

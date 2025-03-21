@@ -15,6 +15,7 @@ import { environment } from '../../environments/environment';
 export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
+  errorMessage: string = '';
 
   constructor(private router: Router) { }
 
@@ -27,26 +28,22 @@ export class LoginPage implements OnInit {
     }
 
     try {
-      const response = await axios.post(`${environment.apiUrl}/users/login`, {
+      const response = await axios.post(`http://localhost:5000/api/users/login`, {
         username: this.username,
         password: this.password,
-      });
+      }, { withCredentials: true });
 
-      const { token } = response.data;
-      localStorage.setItem('token', token);
-
-      // Navegar a la ruta correcta de la página de inicio
+      alert('Inicio de sesión exitoso');
       this.router.navigate(['/home']);
-    } catch (error) {
-      console.error('Sign In Error:', error);
-      alert('Nombre de usuario o contraseña incorrectos');
+    } catch (error: unknown) {  // 📌 Especificamos el tipo 'unknown'
+      const err = error as any;  // 📌 Convertimos a 'any' para acceder a sus propiedades
+      this.errorMessage = err.response?.data?.error || 'Error al iniciar sesión';
+      alert(this.errorMessage);
     }
   }
 
   navigateToRegister(event: Event) {
     event.preventDefault();
-    this.username = '';
-    this.password = '';
     this.router.navigate(['/register']);
   }
 }

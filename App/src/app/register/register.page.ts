@@ -17,6 +17,7 @@ export class RegisterPage implements OnInit {
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
+  errorMessage: string = '';
 
   constructor(private router: Router) { }
 
@@ -25,17 +26,6 @@ export class RegisterPage implements OnInit {
   async handleRegister() {
     if (!this.username || !this.email || !this.password || !this.confirmPassword) {
       alert('Por favor, complete todos los campos.');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.email)) {
-      alert('El email no es válido');
-      return;
-    }
-
-    if (this.password.length < 8) {
-      alert('La contraseña debe tener al menos 8 caracteres');
       return;
     }
 
@@ -48,22 +38,21 @@ export class RegisterPage implements OnInit {
       const response = await axios.post(`${environment.apiUrl}/users/register`, {
         username: this.username,
         email: this.email,
-        password: this.password
-      });
-      alert('Registro Exitoso, ahora puedes iniciar sesión con tu cuenta.');
+        password: this.password,
+      }, { withCredentials: true });
+
+      alert('Registro exitoso');
       this.router.navigate(['/login']);
-    } catch (error) {
-      console.error('Error al registrar el usuario:', error);
-      alert('Hubo un problema al registrar el usuario. Intenta de nuevo.');
+    } catch (error: unknown) {  // 📌 Especificamos el tipo 'unknown'
+      const err = error as any;  // 📌 Convertimos a 'any' para acceder a sus propiedades
+      this.errorMessage = err.response?.data?.error || 'Error al registrar usuario';
+      alert(this.errorMessage);
     }
   }
 
-  navigateToLogin(event: Event) {
+  navigateToLogin(event: Event): void {
     event.preventDefault();
-    this.username = '';
-    this.email = '';
-    this.password = '';
-    this.confirmPassword = '';
     this.router.navigate(['/login']);
   }
+
 }

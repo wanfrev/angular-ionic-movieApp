@@ -15,40 +15,51 @@ import { Location } from '@angular/common'; // Importar Location
     FormsModule,
     HttpClientModule, // Asegurarse de que HttpClientModule esté aquí
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ProfilePage implements OnInit {
-  username: string | null = null;
-  email: string | null = null;
+  username: string = '';
+  email: string = '';
 
-  constructor(private router: Router, private http: HttpClient, private location: Location) { } // Inyectar Location
+  constructor(private router: Router, private http: HttpClient, private location: Location) {}
 
-  ngOnInit() {
-    this.getUserProfile();
-  }
+ngOnInit() {
+  console.log('ProfilePage initialized');
+  this.getUserProfile();
+}
 
-  getUserProfile() {
-    this.http.get('http://localhost:5000/api/users/profile', { withCredentials: true }).subscribe((response: any) => {
-      this.username = response.username;
-      this.email = response.email;
-    }, (error) => {
-      console.error('Error al obtener el perfil del usuario:', error);
-      // Redirigir al usuario a la página de inicio de sesión si hay un error
-      if (error.status === 401 || error.status === 403) {
-        this.router.navigate(['/login']);
-      }
-    });
-  }
+getUserProfile() {
+  this.http.get<{ username: string; email: string }>(
+    'http://localhost:5000/api/users/profile',
+    { withCredentials: true }
+  )
+  .subscribe(
+    (data) => {
+      this.username = data.username;
+      this.email = data.email;
+    },
+    (error) => {
+      console.error('Error al obtener el perfil:', error);
+      this.router.navigate(['/login']);
+    }
+  );
+}
+
 
   signOut() {
-    this.http.post('http://localhost:5000/api/users/logout', {}, { withCredentials: true }).subscribe(() => {
-      this.router.navigate(['/login']);
-    }, (error) => {
-      console.error('Error al cerrar sesión:', error);
-    });
+    this.http.post('http://localhost:5000/api/users/logout', {}, { withCredentials: true }).subscribe(
+      () => {
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; // Eliminar token
+        this.router.navigate(['/login']);
+      },
+      (error: any) => {  // 📌 Definir 'error' como 'any'
+        console.error('Error al cerrar sesión:', error);
+      }
+    );
   }
 
+
   navigateBack() {
-    this.location.back(); // Navegar a la página anterior
+    this.location.back();  // Retrocede a la página anterior
   }
 }

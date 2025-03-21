@@ -17,18 +17,18 @@ export class LibraryService {
   constructor(private http: HttpClient) { }
 
   createLibrary(library: Library): Observable<Library> {
-    return this.http.post<Library>(`${this.apiUrl}/create`, library);
+    return this.http.post<Library>(`${this.apiUrl}/create`, library, { withCredentials: true });
   }
 
   getLibraries(): Observable<Library[]> {
-    return this.http.get<Library[]>(this.apiUrl);
+    return this.http.get<Library[]>(this.apiUrl, { withCredentials: true });
   }
 
   addMovieToLibrary(libraryId: string, movieId: string): Observable<Library> {
-    return this.http.post<Library>(`${this.apiUrl}/${libraryId}/add-movie/${movieId}`, {});
+    return this.http.post<Library>(`${this.apiUrl}/${libraryId}/add-movie/${movieId}`, {}, { withCredentials: true });
   }
 
   getLibraryById(libraryId: string): Observable<Library> {
-    return this.http.get<Library>(`${this.apiUrl}/${libraryId}`);
+    return this.http.get<Library>(`${this.apiUrl}/${libraryId}`, { withCredentials: true });
   }
 }

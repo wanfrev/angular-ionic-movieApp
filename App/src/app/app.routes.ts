@@ -46,5 +46,9 @@ export const routes: Routes = [
   {
     path: 'mymovies',
     loadComponent: () => import('./mymovies/mymovies.page').then( m => m.MymoviesPage)
+  },
+  {
+    path: 'library-detail',
+    loadComponent: () => import('./library-detail/library-detail.page').then( m => m.LibraryDetailPage)
   }
 ];

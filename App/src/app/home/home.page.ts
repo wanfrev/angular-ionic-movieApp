@@ -1,29 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MovieService } from '../services/movie.service';
+import { HttpClient } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; // Importa HttpClientModule
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, HttpClientModule] // Añade HttpClientModule a los imports
+  imports: [CommonModule, FormsModule, IonicModule, HttpClientModule]
 })
 export class HomePage implements OnInit {
   popularMovies: any[] = [];
   recommendedMovies: any[] = [];
   exploreMovies: any[] = [];
+  errorMessage: string = '';
 
-  constructor(private router: Router, private movieService: MovieService) {}
+  constructor(
+    private router: Router,
+    private movieService: MovieService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
-    this.getPopularMovies();
-    this.getRecommendedMovies();
-    this.getExploreMovies();
+    this.verifySession();
+  }
+
+  verifySession() {
+    this.http.get('http://localhost:5000/api/users/profile', { withCredentials: true }).subscribe({
+      next: () => {
+        this.getPopularMovies();
+        this.getRecommendedMovies();
+        this.getExploreMovies();
+      },
+      error: () => {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   getPopularMovies() {
@@ -41,8 +58,7 @@ export class HomePage implements OnInit {
   getRecommendedMovies() {
     this.movieService.getRecommendedMovies().subscribe({
       next: (data) => {
-        this.recommendedMovies = data.results;
-        console.log('Películas recomendadas:', this.recommendedMovies);
+        this.recommendedMovies = data;
       },
       error: (error) => {
         console.error('Error al obtener películas recomendadas:', error);
@@ -53,20 +69,19 @@ export class HomePage implements OnInit {
   getExploreMovies() {
     this.movieService.getExploreMovies().subscribe({
       next: (data) => {
-        this.exploreMovies = data.results;
-        console.log('Películas para explorar:', this.exploreMovies);
+        this.exploreMovies = data;
       },
       error: (error) => {
-        console.error('Error al obtener películas para explorar:', error);
+        console.error('Error al obtener películas por explorar:', error);
       }
     });
   }
 
-  navigateTo(page: string) {
-    this.router.navigate([`/${page}`]);
+  navigateTo(route: string): void {
+    this.router.navigate(['/' + route]);
   }
 
-  navigateToDetail(movieId: number) {
-    this.router.navigate([`/detail-movie`, movieId]);
+  navigateToDetail(movieId: number): void {
+    this.router.navigate(['/detail', movieId]);
   }
 }

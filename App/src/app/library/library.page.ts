@@ -113,4 +113,8 @@ export class LibraryPage implements OnInit {
   deleteList(list: MovieList) {
     this.movieLists = this.movieLists.filter(l => l !== list);
   }
+
+  navigateToLibraryDetail(libraryId: string) {
+    this.router.navigate(['/library', libraryId]);
+  }
 }

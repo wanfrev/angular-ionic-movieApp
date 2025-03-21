@@ -10,52 +10,50 @@
       <button (click)="openAddModal()" class="add-button">+</button>
     </div>
 
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
     <!-- Modal para agregar -->
-    <div id="addMovieModal" class="modal">
+    <div *ngIf="showModal" class="modal">
       <div class="modal-content">
         <span class="close" (click)="closeAddModal()">&times;</span>
         <form (submit)="submitAddForm($event)">
           <label for="movieTitle">Título:</label>
-          <input type="text" id="movieTitle" name="title" required>
+          <input type="text" id="movieTitle" [(ngModel)]="newMovie.title" required>
 
           <label for="movieSynopsis">Sinopsis:</label>
-          <textarea id="movieSynopsis" name="synopsis" required></textarea>
+          <textarea id="movieSynopsis" [(ngModel)]="newMovie.synopsis" required></textarea>
 
           <label for="movieReleaseDate">Fecha de lanzamiento:</label>
-          <input type="date" id="movieReleaseDate" name="releaseDate" required>
+          <input type="date" id="movieReleaseDate" [(ngModel)]="newMovie.releaseDate" required>
 
           <label for="movieDirector">Director:</label>
-          <input type="text" id="movieDirector" name="director" required>
+          <input type="text" id="movieDirector" [(ngModel)]="newMovie.director" required>
 
           <label for="movieDuration">Duración (min):</label>
-          <input type="number" id="movieDuration" name="duration" required>
-
-          <label for="movieRating">Valoración:</label>
-          <input type="number" id="movieRating" name="averageRating" min="0" max="10" step="0.1" required>
+          <input type="number" id="movieDuration" [(ngModel)]="newMovie.duration">
 
           <label for="movieImage">Imagen:</label>
-          <input type="file" id="movieImage" name="image">
+          <input type="file" id="movieImage" (change)="onImageSelected($event)">
 
-          <button type="submit" class="submit-button">Agregar</button>
+          <button type="submit">Agregar Película</button>
         </form>
       </div>
     </div>
 
-    <div id="container">
-      <div class="movie-grid">
-        <div *ngFor="let movie of myMovies; let i = index" class="movie-card">
-          <div class="thumbnail">
-            <img [src]="movie.imageUrl" alt="{{ movie.title }}">
-          </div>
-          <div class="movie-info">
-            <h2><strong>{{ movie.title }}</strong></h2>
-            <p>{{ movie.releaseDate }}</p>
-          </div>
-          <div class="buttons">
-            <button (click)="deleteMovie(movie)" class="delete-button">Eliminar</button>
-          </div>
-        </div>
+    <!-- Lista de películas -->
+    <div *ngIf="myMovies.length > 0; else noMovies" class="movie-grid">
+      <div *ngFor="let movie of myMovies" class="movie-card">
+        <img *ngIf="movie.imageUrl" [src]="movie.imageUrl" [alt]="movie.title">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.synopsis }}</p>
+        <button class="delete-button" (click)="deleteMovie(movie._id)">🗑️</button>
       </div>
     </div>
+
+    <ng-template #noMovies>
+      <p>No tienes películas agregadas.</p>
+    </ng-template>
   </div>
 </ion-content>

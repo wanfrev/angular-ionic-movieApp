@@ -6,6 +6,13 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const { registerSchema, loginSchema } = require('../validators/userValidator');
 const router = express.Router();
 
+const JWT_SECRET = process.env.JWT_SECRET || 'secreto';
+const COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'Lax'
+};
+
 // Registrar nuevo usuario
 router.post('/register', async (req, res) => {
   const { error } = registerSchema.validate(req.body);
@@ -20,14 +27,12 @@ router.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('Hashed Password:', hashedPassword); // Verificar el hash de la contraseña
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
-    const token = jwt.sign({ id: newUser._id, username: newUser.username }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
-
-    res.cookie('token', token, { httpOnly: true });
-    res.status(201).json({ user: newUser });
+    const token = jwt.sign({ id: newUser._id, username: newUser.username }, JWT_SECRET, { expiresIn: '1h' });
+    res.cookie('token', token, COOKIE_OPTIONS);
+    res.status(201).json({ user: { id: newUser._id, username: newUser.username, email: newUser.email } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -38,33 +43,28 @@ router.post('/login', async (req, res) => {
   const { error } = loginSchema.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
 
-  const { username, password } = req.body;
-
   try {
+    const { username, password } = req.body;
     const user = await User.findOne({ username });
+
     if (!user) {
-      console.log('Usuario no encontrado:', username); // Verificar si el usuario no se encuentra
-      return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
+      return res.status(401).json({ error: 'Usuario no encontrado' });
     }
 
-    console.log('Stored Hashed Password:', user.password); // Verificar la contraseña hasheada almacenada
-    const isMatch = await bcrypt.compare(password, user.password);
-    console.log('Password Match:', isMatch); // Verificar el resultado de la comparación
-    if (!isMatch) {
-      console.log('Contraseña incorrecta para el usuario:', username); // Verificar si la contraseña es incorrecta
-      return res.status(401).json({ error: 'Nombre de usuario o contraseña incorrectos' });
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET || 'secreto', { expiresIn: '1h' });
-
-    res.cookie('token', token, { httpOnly: true });
-    res.json({ mensaje: "Inicio de sesión exitoso" });
+    const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
+    res.cookie('token', token, COOKIE_OPTIONS);
+    res.json({ message: 'Inicio de sesión exitoso', user: { id: user._id, username: user.username, email: user.email } });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 });
 
-// Ruta protegida para obtener el perfil del usuario
+// Obtener perfil
 router.get('/profile', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -76,8 +76,8 @@ router.get('/profile', authMiddleware, async (req, res) => {
 
 // Cerrar sesión
 router.post('/logout', (req, res) => {
-  res.clearCookie('token');
-  res.json({ mensaje: "Cierre de sesión exitoso" });
+  res.clearCookie('token', COOKIE_OPTIONS);
+  res.json({ message: 'Sesión cerrada exitosamente' });
 });
 
 module.exports = router;
