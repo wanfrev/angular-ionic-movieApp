@@ -22,7 +22,7 @@ app.use(cors({
   credentials: true // 📌 Permitir cookies y autenticación
 }));
 
-app.use(cookieParser()); // 📌 Middleware para analizar cookies
+app.use(cookieParser());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Servir archivos estáticos
 

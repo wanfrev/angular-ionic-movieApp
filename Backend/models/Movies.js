@@ -66,7 +66,7 @@ const movieSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  user: {  // 📌 Agregamos este campo para que la película pertenezca a un usuario
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,

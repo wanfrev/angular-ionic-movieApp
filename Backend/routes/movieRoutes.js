@@ -72,7 +72,7 @@ router.get('/genres', async (req, res) => {
 });
 
 
-// Ruta para obtener solo las películas del usuario autenticado
+
 router.get('/user-movies', authMiddleware, async (req, res) => {
   try {
     const movies = await Movie.find({ user: req.user.id });
@@ -93,6 +93,74 @@ router.post('/create', authMiddleware, upload.single('image'), async (req, res) 
     res.status(201).json(movie);
   } catch (error) {
     res.status(500).json({ message: 'Error al crear la película', error: error.message });
+  }
+});
+
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const movieId = req.params.id;
+
+    const movie = await Movie.findOne({ _id: movieId, user: userId });
+
+    if (!movie) {
+      return res.status(404).json({ message: 'Película no encontrada o no autorizada' });
+    }
+
+    await Movie.deleteOne({ _id: movieId });
+
+    res.json({ message: 'Película eliminada correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar película:', error);
+    res.status(500).json({ message: 'Error al eliminar la película' });
+  }
+});
+
+router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const movieId = req.params.id;
+
+    const movie = await Movie.findOne({ _id: movieId, user: userId });
+
+    if (!movie) {
+      return res.status(404).json({ message: 'Película no encontrada o no autorizada' });
+    }
+
+    const {
+      title,
+      originalTitle,
+      categories,
+      releaseDate,
+      synopsis,
+      cast,
+      director,
+      duration,
+      type,
+    } = req.body;
+
+    // Actualizar los campos
+    movie.title = title || movie.title;
+    movie.originalTitle = originalTitle || movie.originalTitle;
+    movie.categories = categories?.split(',').map(c => c.trim()) || movie.categories;
+    movie.releaseDate = releaseDate || movie.releaseDate;
+    movie.synopsis = synopsis || movie.synopsis;
+    movie.cast = cast?.split(',').map(a => a.trim()) || movie.cast;
+    movie.director = director || movie.director;
+    movie.duration = duration || movie.duration;
+    movie.type = type || movie.type;
+
+    // Si se sube nueva imagen
+    if (req.file) {
+      movie.imageUrl = `/uploads/${req.file.filename}`;
+    }
+
+    await movie.save();
+
+    res.json({ message: 'Película actualizada con éxito', movie });
+  } catch (error) {
+    console.error('Error al actualizar película:', error);
+    res.status(500).json({ message: 'Error al actualizar la película' });
   }
 });
 

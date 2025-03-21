@@ -62,4 +62,8 @@ export class MovieService {
     });
   }
 
+  getUserMovies(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/user-movies`, { withCredentials: true });
+  }
+
 }
