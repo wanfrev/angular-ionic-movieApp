@@ -2,8 +2,8 @@ import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http'; // Importar HttpClient y HttpClientModule
-import { Location } from '@angular/common'; // Importar Location
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +13,7 @@ import { Location } from '@angular/common'; // Importar Location
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule, // Asegurarse de que HttpClientModule esté aquí
+    HttpClientModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -49,10 +49,10 @@ getUserProfile() {
   signOut() {
     this.http.post('http://localhost:5000/api/users/logout', {}, { withCredentials: true }).subscribe(
       () => {
-        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'; // Eliminar token
+        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         this.router.navigate(['/login']);
       },
-      (error: any) => {  // 📌 Definir 'error' como 'any'
+      (error: any) => {
         console.error('Error al cerrar sesión:', error);
       }
     );
@@ -60,6 +60,6 @@ getUserProfile() {
 
 
   navigateBack() {
-    this.location.back();  // Retrocede a la página anterior
+    this.location.back();
   }
 }

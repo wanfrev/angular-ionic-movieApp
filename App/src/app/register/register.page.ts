@@ -43,8 +43,8 @@ export class RegisterPage implements OnInit {
 
       alert('Registro exitoso');
       this.router.navigate(['/login']);
-    } catch (error: unknown) {  // 📌 Especificamos el tipo 'unknown'
-      const err = error as any;  // 📌 Convertimos a 'any' para acceder a sus propiedades
+    } catch (error: unknown) {
+      const err = error as any;
       this.errorMessage = err.response?.data?.error || 'Error al registrar usuario';
       alert(this.errorMessage);
     }

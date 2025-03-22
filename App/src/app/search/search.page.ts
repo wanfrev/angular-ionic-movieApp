@@ -33,7 +33,6 @@ export class SearchPage implements OnInit {
 
     this.movieService.searchAllMovies(this.searchQuery).subscribe(
       (response) => {
-        // Combinar películas del usuario y de TMDB sin duplicados por título
         this.movies = [
           ...response.userMovies.map((m: any) => ({ ...m, source: 'local' })),
           ...response.tmdbMovies

@@ -4,7 +4,6 @@
     <button (click)="openAddModal()" class="add-button">+</button>
   </div>
 
-  <!-- Modal para agregar película -->
   <div id="addMovieModal" class="modal" [class.open]="isAddModalOpen">
     <div class="modal-content">
       <span class="close" (click)="closeAddModal()">&times;</span>
@@ -75,7 +74,6 @@
 
   <hr />
 
-  <!-- Lista de películas -->
   <h2>Películas guardadas</h2>
   <div class="movie-grid">
     <div *ngFor="let movie of myMovies" class="movie-card">
