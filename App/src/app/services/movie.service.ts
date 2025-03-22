@@ -28,16 +28,8 @@ export class MovieService {
     return this.http.get<any>(`${this.apiUrl}/discover`, { withCredentials: true });
   }
 
-  searchMovies(query: string, genre?: number, year?: number, duration?: number): Observable<any> {
-    const params: any = { query };
-    if (genre !== undefined) params.genre = genre;
-    if (year !== undefined) params.year = year;
-    if (duration !== undefined) params.duration = duration;
-
-    return this.http.get<any>(`${this.apiUrl}/search`, {
-      params,
-      withCredentials: true
-    });
+  searchAllMovies(query: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/search?q=${query}`, { withCredentials: true });
   }
 
   getMovieDetails(movieId: string): Observable<any> {
@@ -65,5 +57,4 @@ export class MovieService {
   getUserMovies(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/user-movies`, { withCredentials: true });
   }
-
 }

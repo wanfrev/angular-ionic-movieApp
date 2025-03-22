@@ -70,7 +70,7 @@ export class ExplorePage implements OnInit {
   }
 
   searchMovies() {
-    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe({
+    this.movieService.searchAllMovies(this.searchQuery).subscribe({
       next: (movies: Movie[]) => {
         this.movies = movies;
       },
