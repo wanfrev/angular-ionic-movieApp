@@ -84,7 +84,7 @@ router.post('/create', authMiddleware, upload.single('image'), async (req, res) 
   try {
     const movieData = req.body;
 
-    // 🛠️ Convertir campos que vienen como string (desde FormData)
+    // Convertir campos que vienen como string (desde FormData)
     if (typeof movieData.categories === 'string') {
       movieData.categories = JSON.parse(movieData.categories);
     }

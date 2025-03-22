@@ -20,15 +20,15 @@ export class MymoviesPage implements OnInit {
     director?: string;
     duration?: number;
     type?: string;
-    externalId?: string;
   } = {};
 
   imageFile: File | null = null;
   previewUrl: string | null = null;
   myMovies: any[] = [];
   errorMessage: string = '';
-  apiUrl = '/api/movies';
+  apiUrl = '/api/movies/user-movies';
   selectedMovieId: string | null = null;
+  isAddModalOpen: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -37,7 +37,7 @@ export class MymoviesPage implements OnInit {
   }
 
   loadMovies() {
-    this.http.get<any[]>(this.apiUrl).subscribe(
+    this.http.get<any[]>(this.apiUrl, { withCredentials: true }).subscribe(
       (movies) => {
         this.myMovies = movies;
       },
@@ -59,110 +59,58 @@ export class MymoviesPage implements OnInit {
     }
   }
 
-  createMovie() {
-    const formData = new FormData();
-    for (const key in this.newMovie) {
-      if (this.newMovie.hasOwnProperty(key)) {
-        const value = this.newMovie[key as keyof typeof this.newMovie];
-        if (value !== undefined && value !== null) {
-          if (key === 'categories' && typeof value === 'string') {
-            const array = value.split(',').map(v => v.trim());
-            formData.append(key, JSON.stringify(array));
-          } else {
-            formData.append(key, String(value));
-          }
-        }
-      }
-    }
-
-    if (this.imageFile) {
-      formData.append('image', this.imageFile);
-    }
-
-    this.http.post(`${this.apiUrl}/create`, formData).subscribe(
-      () => {
-        this.loadMovies();
-        this.closeAddModal();
-        this.newMovie = {};
-        this.imageFile = null;
-        this.previewUrl = null;
-      },
-      (error) => {
-        console.error('Error al crear película:', error);
-        this.errorMessage = 'Error al crear película';
-      }
-    );
-  }
-
-  editMovie(movie: any) {
-    this.selectedMovieId = movie._id;
-    this.newMovie = { ...movie };
-    this.openAddModal();
-  }
-
-  saveMovie() {
-    const formData = new FormData();
-    for (const key in this.newMovie) {
-      if (this.newMovie.hasOwnProperty(key)) {
-        const value = this.newMovie[key as keyof typeof this.newMovie];
-        if (value !== undefined && value !== null) {
-          if (key === 'categories' && typeof value === 'string') {
-            const array = value.split(',').map(v => v.trim());
-            formData.append(key, JSON.stringify(array));
-          } else {
-            formData.append(key, String(value));
-          }
-        }
-      }
-    }
-
-    if (this.imageFile) {
-      formData.append('image', this.imageFile);
-    }
-
-    this.http.put(`${this.apiUrl}/update/${this.selectedMovieId}`, formData).subscribe(
-      () => {
-        this.loadMovies();
-        this.closeAddModal();
-        this.selectedMovieId = null;
-        this.newMovie = {};
-        this.imageFile = null;
-        this.previewUrl = null;
-      },
-      (error) => {
-        console.error('Error al guardar película:', error);
-        this.errorMessage = 'Error al guardar película';
-      }
-    );
-  }
-
-  deleteMovie(movie: any) {
-    if (confirm(`¿Estás seguro de eliminar "${movie.title}"?`)) {
-      this.http.delete(`${this.apiUrl}/delete/${movie._id}`).subscribe(
-        () => this.loadMovies(),
-        (error) => {
-          console.error('Error al eliminar película:', error);
-        }
-      );
-    }
-  }
-
   openAddModal() {
-    const modal = document.getElementById('addMovieModal');
-    if (modal) modal.style.display = 'block';
+    this.isAddModalOpen = true;
   }
 
   closeAddModal() {
-    const modal = document.getElementById('addMovieModal');
-    if (modal) modal.style.display = 'none';
+    this.isAddModalOpen = false;
   }
 
-  navigateBack() {
-    window.history.back();
+  createMovie() {
+    const formData = new FormData();
+
+    for (const key in this.newMovie) {
+      if (this.newMovie.hasOwnProperty(key)) {
+        const value = this.newMovie[key as keyof typeof this.newMovie];
+        if (value !== undefined && value !== null) {
+          if (key === 'categories' && typeof value === 'string') {
+            const array = value.split(',').map(v => v.trim());
+            formData.append(key, JSON.stringify(array));
+          } else {
+            formData.append(key, value.toString());
+          }
+        }
+      }
+    }
+
+    if (this.imageFile) {
+      formData.append('image', this.imageFile);
+    }
+
+    this.http.post('/api/movies/create', formData, { withCredentials: true }).subscribe(
+      () => {
+        this.loadMovies();
+        this.newMovie = {};
+        this.imageFile = null;
+        this.previewUrl = null;
+        this.closeAddModal();
+      },
+      (error) => {
+        console.error('Error al crear la película:', error);
+        this.errorMessage = 'No se pudo crear la película';
+      }
+    );
   }
 
-  getFormattedDate(dateString: string): string {
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
+  deleteMovie(movieId: string) {
+    this.http.delete(`/api/movies/${movieId}`, { withCredentials: true }).subscribe(
+      () => {
+        this.loadMovies();
+      },
+      (error) => {
+        console.error('Error al eliminar la película:', error);
+      }
+    );
   }
 }

@@ -1,146 +1,92 @@
 <div class="content">
   <div class="header">
-    <img
-      src="assets/icons/chevron-back-outline.svg"
-      class="icon"
-      alt="Back Icon"
-      (click)="navigateBack()"
-    />
+    <h1>Mis Películas</h1>
     <button (click)="openAddModal()" class="add-button">+</button>
   </div>
 
   <!-- Modal para agregar película -->
-  <div id="addMovieModal" class="modal">
+  <div id="addMovieModal" class="modal" [class.open]="isAddModalOpen">
     <div class="modal-content">
       <span class="close" (click)="closeAddModal()">&times;</span>
-      <h2>Agregar Película</h2>
-      <form (ngSubmit)="createMovie()">
-        <label for="title">Título</label>
-        <input
-          type="text"
-          id="title"
-          [(ngModel)]="newMovie.title"
-          name="title"
-          required
-        />
-
-        <label for="originalTitle">Título Original</label>
-        <input
-          type="text"
-          id="originalTitle"
-          [(ngModel)]="newMovie.originalTitle"
-          name="originalTitle"
-          required
-        />
-
-        <label for="categories">Categorías (separadas por coma)</label>
-        <input
-          type="text"
-          id="categories"
-          [(ngModel)]="newMovie.categories"
-          name="categories"
-        />
-
-        <label for="releaseDate">Fecha de Estreno</label>
-        <input
-          type="date"
-          id="releaseDate"
-          [value]="newMovie.releaseDate ? getFormattedDate(newMovie.releaseDate) : ''"
-          [(ngModel)]="newMovie.releaseDate"
-          name="releaseDate"
-        />
-
-        <label for="synopsis">Sinopsis</label>
-        <textarea
-          id="synopsis"
-          [(ngModel)]="newMovie.synopsis"
-          name="synopsis"
-        ></textarea>
-
-        <label for="cast">Reparto (separado por coma)</label>
-        <input type="text" id="cast" [(ngModel)]="newMovie.cast" name="cast" />
-
-        <label for="externalId">ID Externo</label>
-        <input
-          type="text"
-          id="externalId"
-          [(ngModel)]="newMovie.externalId"
-          name="externalId"
-          required
-        />
-
-        <label for="director">Director</label>
-        <input
-          type="text"
-          id="director"
-          [(ngModel)]="newMovie.director"
-          name="director"
-          required
-        />
-
-        <label for="duration">Duración (minutos)</label>
-        <input
-          type="number"
-          id="duration"
-          [(ngModel)]="newMovie.duration"
-          name="duration"
-          required
-        />
-
-        <label for="type">Tipo</label>
-        <select id="type" [(ngModel)]="newMovie.type" name="type" required>
-          <option value="movie">Película</option>
-          <option value="series">Serie</option>
-        </select>
-
-        <label for="image">Imagen (poster)</label>
-        <input type="file" id="image" (change)="onImageSelected($event)" />
-
-        <div *ngIf="previewUrl">
-          <p>Vista previa:</p>
-          <img
-            [src]="previewUrl"
-            alt="Poster"
-            style="max-width: 100%; height: auto"
-          />
+      <form (ngSubmit)="createMovie()" enctype="multipart/form-data">
+        <h2>Agregar Película</h2>
+        <div>
+          <label>Título:</label>
+          <input type="text" [(ngModel)]="newMovie.title" name="title" required />
         </div>
 
-        <button type="submit" class="submit-button" *ngIf="!selectedMovieId">
-          Crear Película
-        </button>
-        <button
-          type="button"
-          class="submit-button"
-          *ngIf="selectedMovieId"
-          (click)="saveMovie()"
-        >
-          Guardar Cambios
-        </button>
+        <div>
+          <label>Título Original:</label>
+          <input type="text" [(ngModel)]="newMovie.originalTitle" name="originalTitle" />
+        </div>
+
+        <div>
+          <label>Categorías (separadas por coma):</label>
+          <input type="text" [(ngModel)]="newMovie.categories" name="categories" />
+        </div>
+
+        <div>
+          <label>Fecha de Estreno:</label>
+          <input type="date" [(ngModel)]="newMovie.releaseDate" name="releaseDate" />
+        </div>
+
+        <div>
+          <label>Sinopsis:</label>
+          <textarea [(ngModel)]="newMovie.synopsis" name="synopsis"></textarea>
+        </div>
+
+        <div>
+          <label>Reparto:</label>
+          <input type="text" [(ngModel)]="newMovie.cast" name="cast" />
+        </div>
+
+        <div>
+          <label>Director:</label>
+          <input type="text" [(ngModel)]="newMovie.director" name="director" />
+        </div>
+
+        <div>
+          <label>Duración (min):</label>
+          <input type="number" [(ngModel)]="newMovie.duration" name="duration" />
+        </div>
+
+        <div>
+          <label>Tipo:</label>
+          <input type="text" [(ngModel)]="newMovie.type" name="type" />
+        </div>
+
+        <div>
+          <label>Imagen:</label>
+          <input type="file" (change)="onImageSelected($event)" />
+        </div>
+
+        <div *ngIf="previewUrl">
+          <img [src]="previewUrl" alt="Vista previa" width="150" />
+        </div>
+
+        <button type="submit" class="submit-button">Guardar Película</button>
+
+        <p *ngIf="errorMessage" style="color: red;">
+          {{ errorMessage }}
+        </p>
       </form>
     </div>
   </div>
 
-  <div id="container">
-    <h3>Mis Películas</h3>
-    <div class="movie-grid">
-      <div *ngFor="let movie of myMovies" class="movie-card">
-        <div class="thumbnail">
-          <img
-            *ngIf="movie.imageUrl"
-            [src]="movie.imageUrl"
-            alt="{{ movie.title }}"
-          />
-        </div>
-        <div class="movie-info">
-          <h2>{{ movie.title }}</h2>
-          <p><strong>Director:</strong> {{ movie.director }}</p>
-          <p><strong>Fecha:</strong> {{ movie.releaseDate }}</p>
-        </div>
+  <hr />
+
+  <!-- Lista de películas -->
+  <h2>Películas guardadas</h2>
+  <div class="movie-grid">
+    <div *ngFor="let movie of myMovies" class="movie-card">
+      <div class="thumbnail">
+        <img [src]="movie.imageUrl" alt="{{ movie.title }}" />
+      </div>
+      <div class="movie-info">
+        <h2>{{ movie.title }}</h2>
+        <p>{{ movie.releaseDate | date }}</p>
         <div class="buttons">
-          <button (click)="editMovie(movie)" class="edit-button">Editar</button>
-          <button (click)="deleteMovie(movie)" class="delete-button">
-            Eliminar
-          </button>
+          <button (click)="deleteMovie(movie._id)" class="delete-button">Eliminar</button>
         </div>
       </div>
     </div>
