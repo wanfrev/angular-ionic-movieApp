@@ -13,7 +13,6 @@ const COOKIE_OPTIONS = {
   sameSite: 'Lax'
 };
 
-// Registrar nuevo usuario
 router.post('/register', async (req, res) => {
   const { error } = registerSchema.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
@@ -38,7 +37,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Iniciar sesión
 router.post('/login', async (req, res) => {
   const { error } = loginSchema.validate(req.body);
   if (error) return res.status(400).json({ error: error.details[0].message });
@@ -64,7 +62,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Obtener perfil
 router.get('/profile', authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -74,7 +71,6 @@ router.get('/profile', authMiddleware, async (req, res) => {
   }
 });
 
-// Cerrar sesión
 router.post('/logout', (req, res) => {
   res.clearCookie('token', COOKIE_OPTIONS);
   res.json({ message: 'Sesión cerrada exitosamente' });

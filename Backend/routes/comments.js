@@ -3,7 +3,6 @@ const Comment = require('../models/Comments');
 const authMiddleware = require('../middlewares/authMiddleware');
 const router = express.Router();
 
-// Crear un nuevo comentario
 router.post('/', authMiddleware, async (req, res) => {
   const { userId, contentId, comment, rating } = req.body;
 
@@ -16,7 +15,6 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
-// Obtener todos los comentarios
 router.get('/', authMiddleware, async (req, res) => {
   try {
     const comments = await Comment.find().populate('userId').populate('contentId');
@@ -26,7 +24,6 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
-// Obtener un comentario por ID
 router.get('/:id', authMiddleware, async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id).populate('userId').populate('contentId');
@@ -39,7 +36,6 @@ router.get('/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Actualizar un comentario
 router.put('/:id', authMiddleware, async (req, res) => {
   const { comment, rating } = req.body;
 
@@ -58,7 +54,6 @@ router.put('/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Eliminar un comentario
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     const deletedComment = await Comment.findByIdAndDelete(req.params.id);

@@ -84,7 +84,6 @@ router.post('/create', authMiddleware, upload.single('image'), async (req, res) 
   try {
     const movieData = req.body;
 
-    // Convertir campos que vienen como string (desde FormData)
     if (typeof movieData.categories === 'string') {
       movieData.categories = JSON.parse(movieData.categories);
     }
@@ -94,7 +93,7 @@ router.post('/create', authMiddleware, upload.single('image'), async (req, res) 
     }
 
     if (req.file) {
-      movieData.imageUrl = req.file.path; // o puedes procesar el path para servirla públicamente
+      movieData.imageUrl = req.file.path;
     }
 
     const newMovie = await createMovie(movieData, req.user.id);
@@ -110,14 +109,12 @@ router.get('/search-all', authMiddleware, async (req, res) => {
     const query = req.query.query || '';
     const userId = req.user.id;
 
-    // Buscar en MongoDB
     const userMovies = await Movie.find({
       user: userId,
       title: { $regex: query, $options: 'i' }
     });
 
-    // Buscar en TMDB
-    const tmdbMovies = await searchMovies(query); // usa la función de TMDB
+    const tmdbMovies = await searchMovies(query);
 
     res.json({
       userMovies,
@@ -172,7 +169,6 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
       type,
     } = req.body;
 
-    // Actualizar los campos
     movie.title = title || movie.title;
     movie.originalTitle = originalTitle || movie.originalTitle;
     movie.categories = categories?.split(',').map(c => c.trim()) || movie.categories;
@@ -183,7 +179,6 @@ router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
     movie.duration = duration || movie.duration;
     movie.type = type || movie.type;
 
-    // Si se sube nueva imagen
     if (req.file) {
       movie.imageUrl = `/uploads/${req.file.filename}`;
     }
