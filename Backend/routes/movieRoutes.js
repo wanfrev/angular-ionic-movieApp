@@ -97,12 +97,18 @@ router.get('/genres', async (req, res) => {
 
 router.get('/user-movies', authMiddleware, async (req, res) => {
   try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
     const movies = await Movie.find({ user: req.user.id });
     res.json(movies);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener las películas del usuario', error: error.message });
+    console.error('Error en /user-movies:', error);
+    res.status(500).json({ message: 'Error al obtener detalles de la película', error: error.message });
   }
 });
+
 
 router.post('/create', authMiddleware, upload.single('image'), async (req, res) => {
   try {
