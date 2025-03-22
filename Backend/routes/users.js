@@ -31,10 +31,7 @@ router.post('/register', async (req, res) => {
 
     const token = jwt.sign({ id: newUser._id, username: newUser.username }, JWT_SECRET, { expiresIn: '1h' });
     res.cookie('token', token, COOKIE_OPTIONS);
-    res.status(201).json({
-      token,
-      user: { id: newUser._id, username: newUser.username, email: newUser.email }
-    });
+    res.status(201).json({ user: { id: newUser._id, username: newUser.username, email: newUser.email } });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -59,11 +56,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id, username: user.username }, JWT_SECRET, { expiresIn: '1h' });
     res.cookie('token', token, COOKIE_OPTIONS);
-    res.json({
-      token,
-      message: 'Inicio de sesión exitoso',
-      user: { id: user._id, username: user.username, email: user.email }
-    });
+    res.json({ message: 'Inicio de sesión exitoso', user: { id: user._id, username: user.username, email: user.email } });
   } catch (error) {
     res.status(500).json({ error: 'Error en el servidor' });
   }
