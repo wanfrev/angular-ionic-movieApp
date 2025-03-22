@@ -1,6 +1,6 @@
 header {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
   padding: 10px;
   display: flex;
   justify-content: space-between;
@@ -15,8 +15,8 @@ header {
 }
 
 .back-button, .add-to-library-button {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -25,11 +25,33 @@ header {
 }
 
 .back-button:hover, .add-to-library-button:hover {
-  background-color: #0056b3;
+  background-color: var(--ion-color-primary-shade);
 }
 
 main {
+  position: relative;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ion-color-light);
+}
+
+.background-poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px);
+  z-index: -1;
+}
+
+.content {
+  z-index: 1;
+  text-align: center;
 }
 
 .poster-container img {
@@ -39,7 +61,7 @@ main {
 }
 
 .error-message {
-  color: red;
+  color: var(--ion-color-danger);
   padding: 16px;
 }
 
@@ -60,7 +82,7 @@ main {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: var(--ion-color-light);
   padding: 20px;
   border-radius: 10px;
   width: 80%;
@@ -74,8 +96,8 @@ main {
 }
 
 .close-button {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-light);
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
@@ -84,7 +106,7 @@ main {
 }
 
 .close-button:hover {
-  background-color: #0056b3;
+  background-color: var(--ion-color-primary-shade);
 }
 
 .modal-body ul {
@@ -99,5 +121,5 @@ main {
 }
 
 .modal-body li:hover {
-  background-color: #f1f1f1;
+  background-color: var(--ion-color-light-tint);
 }

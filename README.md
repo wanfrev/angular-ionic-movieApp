@@ -1,1 +1,0 @@
-# angular-ionic-movieApp

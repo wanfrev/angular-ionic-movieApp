@@ -16,28 +16,76 @@
       <h2>Agregar Película</h2>
       <form (ngSubmit)="createMovie()">
         <label for="title">Título</label>
-        <input type="text" id="title" [(ngModel)]="newMovie.title" name="title" required />
+        <input
+          type="text"
+          id="title"
+          [(ngModel)]="newMovie.title"
+          name="title"
+          required
+        />
 
         <label for="originalTitle">Título Original</label>
-        <input type="text" id="originalTitle" [(ngModel)]="newMovie.originalTitle" name="originalTitle" required />
+        <input
+          type="text"
+          id="originalTitle"
+          [(ngModel)]="newMovie.originalTitle"
+          name="originalTitle"
+          required
+        />
 
         <label for="categories">Categorías (separadas por coma)</label>
-        <input type="text" id="categories" [(ngModel)]="newMovie.categories" name="categories" />
+        <input
+          type="text"
+          id="categories"
+          [(ngModel)]="newMovie.categories"
+          name="categories"
+        />
 
         <label for="releaseDate">Fecha de Estreno</label>
-        <input type="date" id="releaseDate" [(ngModel)]="newMovie.releaseDate" name="releaseDate" />
+        <input
+          type="date"
+          id="releaseDate"
+          [value]="newMovie.releaseDate ? getFormattedDate(newMovie.releaseDate) : ''"
+          [(ngModel)]="newMovie.releaseDate"
+          name="releaseDate"
+        />
 
         <label for="synopsis">Sinopsis</label>
-        <textarea id="synopsis" [(ngModel)]="newMovie.synopsis" name="synopsis"></textarea>
+        <textarea
+          id="synopsis"
+          [(ngModel)]="newMovie.synopsis"
+          name="synopsis"
+        ></textarea>
 
         <label for="cast">Reparto (separado por coma)</label>
         <input type="text" id="cast" [(ngModel)]="newMovie.cast" name="cast" />
 
+        <label for="externalId">ID Externo</label>
+        <input
+          type="text"
+          id="externalId"
+          [(ngModel)]="newMovie.externalId"
+          name="externalId"
+          required
+        />
+
         <label for="director">Director</label>
-        <input type="text" id="director" [(ngModel)]="newMovie.director" name="director" required />
+        <input
+          type="text"
+          id="director"
+          [(ngModel)]="newMovie.director"
+          name="director"
+          required
+        />
 
         <label for="duration">Duración (minutos)</label>
-        <input type="number" id="duration" [(ngModel)]="newMovie.duration" name="duration" required />
+        <input
+          type="number"
+          id="duration"
+          [(ngModel)]="newMovie.duration"
+          name="duration"
+          required
+        />
 
         <label for="type">Tipo</label>
         <select id="type" [(ngModel)]="newMovie.type" name="type" required>
@@ -50,11 +98,24 @@
 
         <div *ngIf="previewUrl">
           <p>Vista previa:</p>
-          <img [src]="previewUrl" alt="Poster" style="max-width: 100%; height: auto;" />
+          <img
+            [src]="previewUrl"
+            alt="Poster"
+            style="max-width: 100%; height: auto"
+          />
         </div>
 
-        <button type="submit" class="submit-button" *ngIf="!selectedMovieId">Crear Película</button>
-        <button type="button" class="submit-button" *ngIf="selectedMovieId" (click)="saveMovie()">Guardar Cambios</button>
+        <button type="submit" class="submit-button" *ngIf="!selectedMovieId">
+          Crear Película
+        </button>
+        <button
+          type="button"
+          class="submit-button"
+          *ngIf="selectedMovieId"
+          (click)="saveMovie()"
+        >
+          Guardar Cambios
+        </button>
       </form>
     </div>
   </div>
@@ -64,7 +125,11 @@
     <div class="movie-grid">
       <div *ngFor="let movie of myMovies" class="movie-card">
         <div class="thumbnail">
-          <img *ngIf="movie.imageUrl" [src]="movie.imageUrl" alt="{{ movie.title }}" />
+          <img
+            *ngIf="movie.imageUrl"
+            [src]="movie.imageUrl"
+            alt="{{ movie.title }}"
+          />
         </div>
         <div class="movie-info">
           <h2>{{ movie.title }}</h2>
@@ -73,7 +138,9 @@
         </div>
         <div class="buttons">
           <button (click)="editMovie(movie)" class="edit-button">Editar</button>
-          <button (click)="deleteMovie(movie)" class="delete-button">Eliminar</button>
+          <button (click)="deleteMovie(movie)" class="delete-button">
+            Eliminar
+          </button>
         </div>
       </div>
     </div>

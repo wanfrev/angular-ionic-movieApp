@@ -28,7 +28,7 @@ export class LoginPage implements OnInit {
     }
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/users/login`, {
+      const response = await axios.post(`${environment.apiUrl}/users/login`, {
         username: this.username,
         password: this.password,
       }, { withCredentials: true });
