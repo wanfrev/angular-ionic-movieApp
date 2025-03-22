@@ -42,6 +42,7 @@ const searchMovies = async (query) => {
     });
     return response.data.results;
   } catch (error) {
+    console.error('Error de TMDb:', error.response?.data || error.message);
     throw new Error('Error al buscar películas');
   }
 };

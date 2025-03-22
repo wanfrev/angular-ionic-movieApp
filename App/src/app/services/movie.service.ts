@@ -31,7 +31,7 @@ export class MovieService {
   searchAllMovies(query: string): Observable<any> {
     const token = localStorage.getItem('token'); // o de donde guardes tu JWT
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get(`${this.apiUrl}/movies/search-all?query=${query}`, { headers });
+    return this.http.get(`${this.apiUrl}/search-all?query=${query}`, { headers });
   }
 
   getMovieDetails(movieId: string): Observable<any> {

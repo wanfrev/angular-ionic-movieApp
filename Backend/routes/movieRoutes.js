@@ -42,12 +42,36 @@ router.get('/discover', async (req, res) => {
   }
 });
 
-router.get('/search', async (req, res) => {
+router.get('/search-all', authMiddleware, async (req, res) => {
   try {
     const query = req.query.query;
     const movies = await searchMovies(query);
     res.json(movies);
   } catch (error) {
+    res.status(500).json({ message: 'Error al buscar películas', error: error.message });
+  }
+
+  try {
+    const query = req.query.query || '';
+    const userId = req.user.id;
+
+    if (!query || query.trim() === '') {
+      return res.status(400).json({ message: 'La consulta no puede estar vacía' });
+    }    
+
+    const userMovies = await Movie.find({
+      user: userId,
+      title: { $regex: query, $options: 'i' }
+    });
+
+    const tmdbMovies = await searchMovies(query);
+
+    res.json({
+      userMovies,
+      tmdbMovies
+    });
+  } catch (error) {
+    console.error('Error al buscar películas:', error);
     res.status(500).json({ message: 'Error al buscar películas', error: error.message });
   }
 });
@@ -101,28 +125,6 @@ router.post('/create', authMiddleware, upload.single('image'), async (req, res) 
   } catch (error) {
     console.error('❌ Error al crear película:', error.message);
     res.status(500).json({ message: 'Error al crear película', error: error.message });
-  }
-});
-
-router.get('/search-all', authMiddleware, async (req, res) => {
-  try {
-    const query = req.query.query || '';
-    const userId = req.user.id;
-
-    const userMovies = await Movie.find({
-      user: userId,
-      title: { $regex: query, $options: 'i' }
-    });
-
-    const tmdbMovies = await searchMovies(query);
-
-    res.json({
-      userMovies,
-      tmdbMovies
-    });
-  } catch (error) {
-    console.error('Error al buscar películas:', error);
-    res.status(500).json({ message: 'Error al buscar películas', error: error.message });
   }
 });
 
