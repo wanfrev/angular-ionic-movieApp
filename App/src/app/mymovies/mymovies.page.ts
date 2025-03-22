@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Location } from '@angular/common';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-mymovies',
@@ -16,21 +18,22 @@ export class MymoviesPage implements OnInit {
     categories?: string | string[];
     releaseDate?: string;
     synopsis?: string;
-    cast?: string | string[];
     director?: string;
     duration?: number;
-    type?: string;
+    externalId?: string;
+    type?: 'movie' | 'series';
   } = {};
+
 
   imageFile: File | null = null;
   previewUrl: string | null = null;
   myMovies: any[] = [];
   errorMessage: string = '';
-  apiUrl = '/api/movies/user-movies';
+  apiUrl = 'http://localhost:5000/api/movies/user-movies';
   selectedMovieId: string | null = null;
   isAddModalOpen: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private location: Location) {}
 
   ngOnInit() {
     this.loadMovies();
@@ -70,6 +73,14 @@ export class MymoviesPage implements OnInit {
   createMovie() {
     const formData = new FormData();
 
+    if (!this.newMovie.externalId) {
+      this.newMovie.externalId = uuidv4();
+    }
+
+    if (!this.newMovie.type) {
+      this.newMovie.type = 'movie';
+    }
+
     for (const key in this.newMovie) {
       if (this.newMovie.hasOwnProperty(key)) {
         const value = this.newMovie[key as keyof typeof this.newMovie];
@@ -98,13 +109,14 @@ export class MymoviesPage implements OnInit {
       },
       (error) => {
         console.error('Error al crear la película:', error);
-        this.errorMessage = 'No se pudo crear la película';
+        this.errorMessage = error?.error?.error || 'No se pudo crear la película';
       }
     );
   }
 
+
   deleteMovie(movieId: string) {
-    this.http.delete(`/api/movies/${movieId}`, { withCredentials: true }).subscribe(
+    this.http.delete(`http://localhost:5000/api/movies/${movieId}`, { withCredentials: true }).subscribe(
       () => {
         this.loadMovies();
       },
@@ -112,5 +124,9 @@ export class MymoviesPage implements OnInit {
         console.error('Error al eliminar la película:', error);
       }
     );
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }

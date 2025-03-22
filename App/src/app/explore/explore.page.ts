@@ -15,11 +15,6 @@ interface Movie {
   release_date: string;
 }
 
-interface Genre {
-  id: number;
-  name: string;
-}
-
 @Component({
   selector: 'app-explore',
   templateUrl: './explore.page.html',
@@ -29,12 +24,7 @@ interface Genre {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ExplorePage implements OnInit {
-  searchQuery: string = '';
   movies: Movie[] = [];
-  genres: Genre[] = [];
-  selectedGenre: number | undefined = undefined;
-  year: number | undefined = undefined;
-  duration: number = 0;
 
   constructor(
     public router: Router,
@@ -43,19 +33,7 @@ export class ExplorePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getGenres();
     this.getExploreMovies();
-  }
-
-  getGenres() {
-    this.movieService.getGenres().subscribe({
-      next: (genres: Genre[]) => {
-        this.genres = genres;
-      },
-      error: (error: any) => {
-        console.error('Error al obtener géneros:', error);
-      }
-    });
   }
 
   getExploreMovies() {
@@ -65,17 +43,6 @@ export class ExplorePage implements OnInit {
       },
       error: (error: any) => {
         console.error('Error al obtener películas por explorar:', error);
-      }
-    });
-  }
-
-  searchMovies() {
-    this.movieService.searchAllMovies(this.searchQuery).subscribe({
-      next: (movies: Movie[]) => {
-        this.movies = movies;
-      },
-      error: (error: any) => {
-        console.error('Error al buscar películas:', error);
       }
     });
   }

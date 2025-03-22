@@ -76,7 +76,7 @@ const createMovie = async (movieData, userId) => {
 };
 
 const getUserMovies = async (userId) => {
-  return await Movie.find({ owner: userId });
+  return await Movie.find({ user: userId });
 };
 
 module.exports = {

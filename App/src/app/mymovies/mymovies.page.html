@@ -1,5 +1,11 @@
 <div class="content">
   <div class="header">
+    <img
+      src="assets/icons/chevron-back-outline.svg"
+      class="icon"
+      alt="Back Icon"
+      (click)="navigateBack()"
+    />
     <h1>Mis Películas</h1>
     <button (click)="openAddModal()" class="add-button">+</button>
   </div>
@@ -7,51 +13,67 @@
   <div id="addMovieModal" class="modal" [class.open]="isAddModalOpen">
     <div class="modal-content">
       <span class="close" (click)="closeAddModal()">&times;</span>
-      <form (ngSubmit)="createMovie()" enctype="multipart/form-data">
+      <form (ngSubmit)="createMovie()" #movieForm="ngForm" enctype="multipart/form-data">
         <h2>Agregar Película</h2>
         <div>
           <label>Título:</label>
-          <input type="text" [(ngModel)]="newMovie.title" name="title" required />
+          <input type="text" [(ngModel)]="newMovie.title" name="title" required #title="ngModel" maxlength="100" />
+          <div *ngIf="title.invalid && (title.dirty || title.touched)" class="error">
+            <div *ngIf="title.errors?.['required']">El título es obligatorio.</div>
+            <div *ngIf="title.errors?.['maxlength']">El título no puede tener más de 100 caracteres.</div>
+          </div>
         </div>
 
         <div>
           <label>Título Original:</label>
-          <input type="text" [(ngModel)]="newMovie.originalTitle" name="originalTitle" />
+          <input type="text" [(ngModel)]="newMovie.originalTitle" name="originalTitle" maxlength="100" #originalTitle="ngModel" />
+          <div *ngIf="originalTitle.invalid && (originalTitle.dirty || originalTitle.touched)" class="error">
+            <div *ngIf="originalTitle.errors?.['maxlength']">El título original no puede tener más de 100 caracteres.</div>
+          </div>
         </div>
 
         <div>
           <label>Categorías (separadas por coma):</label>
-          <input type="text" [(ngModel)]="newMovie.categories" name="categories" />
+          <input type="text" [(ngModel)]="newMovie.categories" name="categories" maxlength="200" #categories="ngModel" />
+          <div *ngIf="categories.invalid && (categories.dirty || categories.touched)" class="error">
+            <div *ngIf="categories.errors?.['maxlength']">Las categorías no pueden tener más de 200 caracteres.</div>
+          </div>
         </div>
 
         <div>
           <label>Fecha de Estreno:</label>
-          <input type="date" [(ngModel)]="newMovie.releaseDate" name="releaseDate" />
+          <input type="date" [(ngModel)]="newMovie.releaseDate" name="releaseDate" required #releaseDate="ngModel" />
+          <div *ngIf="releaseDate.invalid && (releaseDate.dirty || releaseDate.touched)" class="error">
+            <div *ngIf="releaseDate.errors?.['required']">La fecha de estreno es obligatoria.</div>
+          </div>
         </div>
 
         <div>
           <label>Sinopsis:</label>
-          <textarea [(ngModel)]="newMovie.synopsis" name="synopsis"></textarea>
-        </div>
-
-        <div>
-          <label>Reparto:</label>
-          <input type="text" [(ngModel)]="newMovie.cast" name="cast" />
+          <textarea [(ngModel)]="newMovie.synopsis" name="synopsis" required #synopsis="ngModel" maxlength="1000"></textarea>
+          <div *ngIf="synopsis.invalid && (synopsis.dirty || synopsis.touched)" class="error">
+            <div *ngIf="synopsis.errors?.['required']">La sinopsis es obligatoria.</div>
+            <div *ngIf="synopsis.errors?.['maxlength']">La sinopsis no puede tener más de 1000 caracteres.</div>
+          </div>
         </div>
 
         <div>
           <label>Director:</label>
-          <input type="text" [(ngModel)]="newMovie.director" name="director" />
+          <input type="text" [(ngModel)]="newMovie.director" name="director" required #director="ngModel" maxlength="100" />
+          <div *ngIf="director.invalid && (director.dirty || director.touched)" class="error">
+            <div *ngIf="director.errors?.['required']">El director es obligatorio.</div>
+            <div *ngIf="director.errors?.['maxlength']">El director no puede tener más de 100 caracteres.</div>
+          </div>
         </div>
 
         <div>
           <label>Duración (min):</label>
-          <input type="number" [(ngModel)]="newMovie.duration" name="duration" />
-        </div>
-
-        <div>
-          <label>Tipo:</label>
-          <input type="text" [(ngModel)]="newMovie.type" name="type" />
+          <input type="number" [(ngModel)]="newMovie.duration" name="duration" required #duration="ngModel" min="1" max="600" />
+          <div *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="error">
+            <div *ngIf="duration.errors?.['required']">La duración es obligatoria.</div>
+            <div *ngIf="duration.errors?.['min']">La duración debe ser al menos de 1 minuto.</div>
+            <div *ngIf="duration.errors?.['max']">La duración no puede ser mayor a 600 minutos.</div>
+          </div>
         </div>
 
         <div>
@@ -63,7 +85,7 @@
           <img [src]="previewUrl" alt="Vista previa" width="150" />
         </div>
 
-        <button type="submit" class="submit-button">Guardar Película</button>
+        <button type="submit" class="submit-button" [disabled]="movieForm.invalid">Guardar Película</button>
 
         <p *ngIf="errorMessage" style="color: red;">
           {{ errorMessage }}

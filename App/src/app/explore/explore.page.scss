@@ -33,37 +33,6 @@
   padding: 16px;
 }
 
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.filter {
-  display: flex;
-  flex-direction: column;
-}
-
-.filter label {
-  margin-bottom: 4px;
-  font-weight: bold;
-}
-
-.filter input,
-.filter select {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: transparent;
-  color: #333333;
-}
-
-.filter label, span {
-  color: #333333;
-}
-
 .movie-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

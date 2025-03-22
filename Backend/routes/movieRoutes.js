@@ -8,7 +8,7 @@ const {
   getExploreMovies,
   getGenres
 } = require('../services/movieService');
-
+const Movie = require('../models/Movies');
 const multer = require('multer');
 const authMiddleware = require('../middlewares/authMiddleware');
 const router = express.Router();
