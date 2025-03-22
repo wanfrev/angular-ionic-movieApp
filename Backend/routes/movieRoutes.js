@@ -71,8 +71,6 @@ router.get('/genres', async (req, res) => {
   }
 });
 
-
-
 router.get('/user-movies', authMiddleware, async (req, res) => {
   try {
     const movies = await Movie.find({ user: req.user.id });

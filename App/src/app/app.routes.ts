@@ -36,7 +36,7 @@ export const routes: Routes = [
     component: ProfilePage
   },
   {
-    path: 'detail-movie/:id', // Agrega el parámetro id a la ruta
+    path: 'detail-movie/:id',
     loadComponent: () => import('./detail-movie/detail-movie.page').then(m => m.MovieDetailPage)
   },
   {

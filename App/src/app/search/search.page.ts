@@ -15,11 +15,6 @@ interface Movie {
   release_date: string;
 }
 
-interface Genre {
-  id: number;
-  name: string;
-}
-
 @Component({
   selector: 'app-search',
   templateUrl: './search.page.html',
@@ -31,30 +26,16 @@ interface Genre {
 export class SearchPage implements OnInit {
   searchQuery: string = '';
   movies: Movie[] = [];
-  genres: Genre[] = [];
-  selectedGenre: number | undefined = undefined;
   year: number | undefined = undefined;
   duration: number = 0;
 
   constructor(public router: Router, private movieService: MovieService, private location: Location) { }
 
   ngOnInit() {
-    this.getGenres();
-  }
-
-  getGenres() {
-    this.movieService.getGenres().subscribe({
-      next: (genres: Genre[]) => {
-        this.genres = genres;
-      },
-      error: (error: any) => {
-        console.error('Error al obtener géneros:', error);
-      }
-    });
   }
 
   searchMovies() {
-    this.movieService.searchMovies(this.searchQuery, this.selectedGenre, this.year, this.duration).subscribe({
+    this.movieService.searchMovies(this.searchQuery, this.year, this.duration).subscribe({
       next: (movies: Movie[]) => {
         this.movies = movies;
       },
@@ -65,7 +46,7 @@ export class SearchPage implements OnInit {
   }
 
   goToDetail(id: number) {
-    this.router.navigate(['/detail', id]);
+    this.router.navigate(['/detail-movie', id]);
   }
 
   navigateBack() {

@@ -82,6 +82,6 @@ export class HomePage implements OnInit {
   }
 
   navigateToDetail(movieId: number): void {
-    this.router.navigate(['/detail', movieId]);
+    this.router.navigate(['/detail-movie', movieId]);
   }
 }

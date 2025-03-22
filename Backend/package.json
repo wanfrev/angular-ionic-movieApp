@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node set-env-backend.js && node server.js",
+    "start": "node set-env-backend.js && node server.js && node server",
     "dev": "node set-env-backend.js && nodemon server.js"
   },
   "keywords": [],

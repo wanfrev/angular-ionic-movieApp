@@ -15,12 +15,6 @@
         <input type="number" id="year" [(ngModel)]="year" (change)="searchMovies()" placeholder="Year" />
       </div>
       <div class="filter">
-        <label for="genre">Genre</label>
-        <select id="genre" [(ngModel)]="selectedGenre" (change)="searchMovies()">
-          <option *ngFor="let genre of genres" [value]="genre.id">{{ genre.name }}</option>
-        </select>
-      </div>
-      <div class="filter">
         <label for="duration">Duration</label>
         <input type="range" id="duration" [(ngModel)]="duration" (input)="searchMovies()" min="0" max="300" />
         <span>{{ duration }} min</span>
