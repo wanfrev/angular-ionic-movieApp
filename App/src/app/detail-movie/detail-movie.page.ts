@@ -1,92 +1,78 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
-interface Movie {
-  _id?: string;
-  title: string;
-  originalTitle: string;
-  releaseDate: string;
-  imageUrl?: string;
-  synopsis: string;
-  director: string;
-  duration: number;
-  type: string;
-  categories: string[];
-  cast: string[];
-}
-
 @Component({
-  selector: 'app-mymovies',
-  templateUrl: './mymovies.page.html',
-  styleUrls: ['./mymovies.page.scss'],
-  imports: [CommonModule, FormsModule, HttpClientModule]
+  selector: 'app-detail-movie',
+  templateUrl: './detail-movie.page.html',
+  styleUrls: ['./detail-movie.page.scss'],
+  standalone: true,
+  imports: [CommonModule, HttpClientModule]
 })
-export class MovieDetailPage  implements OnInit {
-  newMovie: Partial<Movie> = {};
-  imageFile: File | null = null;
-  myMovies: Movie[] = [];
+export class MovieDetailPage implements OnInit {
+  movieId: string = '';
+  movie: any = null;
   errorMessage: string = '';
+  director: string = '';
+  libraries: any[] = [];
+  isAddToLibraryModalOpen: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.loadMovies();
+    this.movieId = this.route.snapshot.paramMap.get('id') ?? '';
+    if (this.movieId) {
+      this.loadMovieDetails();
+      this.loadLibraries();
+    }
   }
 
-  loadMovies() {
-    this.http.get<Movie[]>('/api/movies', { withCredentials: true }).subscribe({
-      next: (movies) => (this.myMovies = movies),
+  loadMovieDetails() {
+    this.http.get(`/api/movies/${this.movieId}`, { withCredentials: true }).subscribe({
+      next: (data: any) => {
+        this.movie = data;
+        this.director = data.director || 'Desconocido';
+      },
       error: (err) => {
-        console.error('Error al cargar películas:', err);
-        this.errorMessage = 'No se pudieron cargar tus películas.';
+        console.error('Error al obtener detalles de película:', err);
+        this.errorMessage = 'No se pudieron cargar los detalles de la película.';
       }
     });
   }
 
-  onImageSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.imageFile = file;
-    }
+  loadLibraries() {
+    this.http.get('/api/libraries', { withCredentials: true }).subscribe({
+      next: (data: any) => this.libraries = data,
+      error: (err) => console.error('Error al cargar bibliotecas:', err)
+    });
   }
 
-  imagePreview(): string {
-    return this.imageFile ? URL.createObjectURL(this.imageFile) : '';
+  navigateBack() {
+    this.router.navigate(['/home']);
   }
 
-  createMovie() {
-    if (!this.newMovie.title || !this.newMovie.originalTitle || !this.newMovie.director || !this.newMovie.duration || !this.newMovie.type) {
-      this.errorMessage = 'Por favor completa todos los campos obligatorios.';
-      return;
-    }
+  openAddToLibraryModal() {
+    this.isAddToLibraryModalOpen = true;
+  }
 
-    const formData = new FormData();
-    for (const key in this.newMovie) {
-      const value = (this.newMovie as any)[key];
-      if (value !== undefined && value !== null) {
-        if (Array.isArray(value)) {
-          formData.append(key, value.join(','));
-        } else {
-          formData.append(key, value);
-        }
-      }
-    }
+  closeAddToLibraryModal() {
+    this.isAddToLibraryModalOpen = false;
+  }
 
-    if (this.imageFile) {
-      formData.append('image', this.imageFile);
-    }
-
-    this.http.post('/api/movies/create', formData, { withCredentials: true }).subscribe({
+  addToLibrary(libraryId: string) {
+    this.http.post(`/api/libraries/${libraryId}/add-movie/${this.movieId}`, {}, { withCredentials: true }).subscribe({
       next: () => {
-        this.loadMovies();
-        this.newMovie = {};
-        this.imageFile = null;
+        this.closeAddToLibraryModal();
+        alert('Película agregada a la biblioteca.');
       },
       error: (err) => {
-        console.error('Error al crear la película:', err);
-        this.errorMessage = 'Error al crear la película.';
+        console.error('Error al agregar película a la biblioteca:', err);
+        alert('Error al agregar la película.');
       }
     });
   }

@@ -7,9 +7,10 @@
 </header>
 
 <main *ngIf="movie" class="ion-padding">
-  <div class="poster-container" *ngIf="movie.poster_path">
-    <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title">
+  <div class="poster-container" *ngIf="movie.poster_path || movie.imageUrl">
+    <img [src]="movie.imageUrl ? movie.imageUrl : 'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title">
   </div>
+
 
   <h2>{{ movie.title }}</h2>
   <p><strong>Descripción:</strong> {{ movie.overview || 'No disponible' }}</p>
