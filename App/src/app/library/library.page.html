@@ -35,7 +35,7 @@
   </div>
 
   <div id="container">
-    <div *ngFor="let list of movieLists; let i = index">
+    <div *ngFor="let list of movieLists; let i = index" (click)="viewLibrary(list._id)">
       <div class="list-item" *ngIf="list._id" (click)="navigateToLibraryDetail(list._id)">
         {{ list.name }}
         <div class="buttons">

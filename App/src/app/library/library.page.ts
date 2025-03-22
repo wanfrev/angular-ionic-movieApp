@@ -118,4 +118,8 @@ export class LibraryPage implements OnInit {
   navigateToLibraryDetail(libraryId: string) {
     this.router.navigate(['/library', libraryId]);
   }
+
+  viewLibrary(libraryId: string) {
+    this.router.navigate(['/library-detail', libraryId]);
+  }
 }
