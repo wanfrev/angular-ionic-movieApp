@@ -121,6 +121,7 @@ router.get('/search-all', authMiddleware, async (req, res) => {
       tmdbMovies
     });
   } catch (error) {
+    console.error('Error al buscar películas:', error);
     res.status(500).json({ message: 'Error al buscar películas', error: error.message });
   }
 });

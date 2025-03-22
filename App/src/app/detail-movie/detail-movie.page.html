@@ -1,42 +1,45 @@
-<header>
-  <div class="toolbar">
-    <button class="back-button" (click)="navigateBack()">Atrás</button>
-    <h1>Detalle</h1>
-    <button class="add-to-library-button" (click)="openAddToLibraryModal()">Agregar a Biblioteca</button>
+<div class="content">
+  <div class="header">
+    <img
+      src="assets/icons/chevron-back-outline.svg"
+      class="icon"
+      alt="Back Icon"
+      (click)="navigateBack()"
+    />
+    <button (click)="openAddToLibraryModal()" class="add-button">Agregar a Biblioteca</button>
   </div>
-</header>
 
-<main *ngIf="movie" class="ion-padding">
-  <div class="background-poster" [ngStyle]="{'background-image': 'url(' + (movie.imageUrl ? movie.imageUrl : 'https://image.tmdb.org/t/p/w500' + movie.poster_path) + ')'}"></div>
-  <div class="content">
-    <div class="poster-container">
-      <img [src]="movie.imageUrl ? movie.imageUrl : 'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title">
+  <main *ngIf="movie" class="ion-padding">
+    <div class="content">
+      <div class="poster-container">
+        <img [src]="movie.imageUrl ? movie.imageUrl : 'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title">
+      </div>
+      <h2>{{ movie.title }}</h2>
+      <p><strong>Descripción:</strong> {{ movie.overview || 'No disponible' }}</p>
+      <p><strong>Director:</strong> {{ director }}</p>
+      <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date || 'Desconocida' }}</p>
+      <p><strong>Popularidad:</strong> {{ movie.popularity || 'No disponible' }}</p>
+      <p><strong>Votos:</strong> {{ movie.vote_count }} (promedio: {{ movie.vote_average }})</p>
     </div>
-    <h2>{{ movie.title }}</h2>
-    <p><strong>Descripción:</strong> {{ movie.overview || 'No disponible' }}</p>
-    <p><strong>Director:</strong> {{ director }}</p>
-    <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date || 'Desconocida' }}</p>
-    <p><strong>Popularidad:</strong> {{ movie.popularity || 'No disponible' }}</p>
-    <p><strong>Votos:</strong> {{ movie.vote_count }} (promedio: {{ movie.vote_average }})</p>
+  </main>
+
+  <div *ngIf="errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
   </div>
-</main>
 
-<div *ngIf="errorMessage" class="error-message">
-  <p>{{ errorMessage }}</p>
-</div>
-
-<div class="modal" [class.open]="isAddToLibraryModalOpen">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Agregar a Biblioteca</h2>
-      <button class="close-button" (click)="closeAddToLibraryModal()">Cerrar</button>
-    </div>
-    <div class="modal-body">
-      <ul>
-        <li *ngFor="let library of libraries" (click)="addToLibrary(library._id)">
-          {{ library.name }}
-        </li>
-      </ul>
+  <div class="modal" [class.open]="isAddToLibraryModalOpen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Agregar a Biblioteca</h2>
+        <button class="close-button" (click)="closeAddToLibraryModal()">Cerrar</button>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li *ngFor="let library of libraries" (click)="addToLibrary(library._id)">
+            {{ library.name }}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
