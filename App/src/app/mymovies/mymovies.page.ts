@@ -13,10 +13,10 @@ export class MymoviesPage implements OnInit {
   newMovie: {
     title?: string;
     originalTitle?: string;
-    categories?: string;
+    categories?: string | string[];
     releaseDate?: string;
     synopsis?: string;
-    cast?: string;
+    cast?: string | string[];
     director?: string;
     duration?: number;
     type?: string;
@@ -54,18 +54,40 @@ export class MymoviesPage implements OnInit {
   }
 
   createMovie() {
-    if (!this.newMovie.title || !this.newMovie.originalTitle || !this.newMovie.director || !this.newMovie.duration || !this.newMovie.type) {
-      this.errorMessage = 'Por favor completa todos los campos obligatorios.';
+    if (!this.newMovie.title || !this.imageFile) {
+      this.errorMessage = 'Debes completar todos los campos y seleccionar una imagen.';
       return;
     }
 
-    const formData = new FormData();
-    for (const key in this.newMovie) {
-      const value = (this.newMovie as any)[key];
-      if (value !== undefined && value !== null) {
-        formData.append(key, value);
-      }
+    // 🔁 Convertir cadenas a arrays
+    if (this.newMovie.categories && typeof this.newMovie.categories === 'string') {
+      this.newMovie.categories = this.newMovie.categories
+        .split(',')
+        .map((c) => c.trim());
     }
+
+    if (this.newMovie.cast && typeof this.newMovie.cast === 'string') {
+      this.newMovie.cast = this.newMovie.cast
+        .split(',')
+        .map((c) => c.trim());
+    }
+
+    // 🔁 Convertir la fecha a formato ISO
+    if (this.newMovie.releaseDate) {
+      this.newMovie.releaseDate = new Date(this.newMovie.releaseDate).toISOString();
+    }
+
+    // 🧩 Preparar FormData para envío
+    const formData = new FormData();
+    formData.append('title', this.newMovie.title || '');
+    formData.append('originalTitle', this.newMovie.originalTitle || '');
+    formData.append('categories', JSON.stringify(this.newMovie.categories || []));
+    formData.append('releaseDate', this.newMovie.releaseDate || '');
+    formData.append('synopsis', this.newMovie.synopsis || '');
+    formData.append('cast', JSON.stringify(this.newMovie.cast || []));
+    formData.append('director', this.newMovie.director || '');
+    formData.append('duration', (this.newMovie.duration || '').toString());
+    formData.append('type', this.newMovie.type || '');
 
     if (this.imageFile) {
       formData.append('image', this.imageFile);
@@ -73,13 +95,14 @@ export class MymoviesPage implements OnInit {
 
     this.http.post(`${this.apiUrl}/create`, formData, { withCredentials: true }).subscribe({
       next: () => {
-        this.loadMovies();
-        this.resetForm();
-        this.closeAddModal();
+        this.newMovie = {};
+        this.imageFile = null;
+        this.previewUrl = null;
+        this.loadMovies(); // recarga las películas del usuario
       },
       error: (err) => {
-        console.error('Error al crear la película:', err);
-        this.errorMessage = 'Error al crear la película.';
+        console.error('Error al crear película:', err);
+        this.errorMessage = 'No se pudo crear la película.';
       }
     });
   }

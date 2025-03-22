@@ -83,14 +83,25 @@ router.get('/user-movies', authMiddleware, async (req, res) => {
 router.post('/create', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const movieData = req.body;
-    const imageUrl = req.file
-      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
-      : '';
 
-    const movie = await createMovie({ ...movieData, imageUrl }, req.user.id);
-    res.status(201).json(movie);
+    // 🛠️ Convertir campos que vienen como string (desde FormData)
+    if (typeof movieData.categories === 'string') {
+      movieData.categories = JSON.parse(movieData.categories);
+    }
+
+    if (typeof movieData.cast === 'string') {
+      movieData.cast = JSON.parse(movieData.cast);
+    }
+
+    if (req.file) {
+      movieData.imageUrl = req.file.path; // o puedes procesar el path para servirla públicamente
+    }
+
+    const newMovie = await createMovie(movieData, req.user.id);
+    res.status(201).json(newMovie);
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear la película', error: error.message });
+    console.error('❌ Error al crear película:', error.message);
+    res.status(500).json({ message: 'Error al crear película', error: error.message });
   }
 });
 

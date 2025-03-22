@@ -68,7 +68,6 @@ const getGenres = async () => {
   }
 };
 
-
 const createMovie = async (movieData, userId) => {
   const movie = new Movie({ ...movieData, user: userId });
   await movie.save();
