@@ -33,10 +33,15 @@ export class LoginPage implements OnInit {
         password: this.password,
       }, { withCredentials: true });
 
+      const token = response.data.token;
+      if (token) {
+        localStorage.setItem('token', token); // 🔐 Guarda el token
+      }
+
       alert('Inicio de sesión exitoso');
       this.router.navigate(['/home']);
-    } catch (error: unknown) {  // 📌 Especificamos el tipo 'unknown'
-      const err = error as any;  // 📌 Convertimos a 'any' para acceder a sus propiedades
+    } catch (error: unknown) {
+      const err = error as any;
       this.errorMessage = err.response?.data?.error || 'Error al iniciar sesión';
       alert(this.errorMessage);
     }

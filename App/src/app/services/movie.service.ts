@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LibraryService } from './library.service';
 
@@ -29,7 +29,9 @@ export class MovieService {
   }
 
   searchAllMovies(query: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/search-all?query=${query}`, { withCredentials: true });
+    const token = localStorage.getItem('token'); // o de donde guardes tu JWT
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.apiUrl}/movies/search-all?query=${query}`, { headers });
   }
 
   getMovieDetails(movieId: string): Observable<any> {

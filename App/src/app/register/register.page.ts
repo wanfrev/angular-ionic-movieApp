@@ -41,8 +41,13 @@ export class RegisterPage implements OnInit {
         password: this.password,
       }, { withCredentials: true });
 
+      const token = response.data.token;
+      if (token) {
+        localStorage.setItem('token', token); // 🔐 Guarda el token
+      }
+
       alert('Registro exitoso');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/home']);
     } catch (error: unknown) {
       const err = error as any;
       this.errorMessage = err.response?.data?.error || 'Error al registrar usuario';
