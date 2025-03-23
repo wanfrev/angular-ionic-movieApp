@@ -52,6 +52,7 @@ export class SearchPage implements OnInit {
     this.router.navigate(['/detail-movie', id]);
   }
 
+
   navigateBack() {
     this.location.back();
   }

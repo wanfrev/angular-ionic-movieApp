@@ -29,7 +29,7 @@ export class MovieService {
   }
 
   searchAllMovies(query: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/search-all?query=${query}`, { withCredentials: true });
+    return this.http.get<any>(`${this.apiUrl}/search?q=${query}`, { withCredentials: true });
   }
 
   getMovieDetails(movieId: string): Observable<any> {

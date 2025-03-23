@@ -134,6 +134,27 @@ router.post('/create', authMiddleware, upload.single('image'), async (req, res) 
   }
 });
 
+router.get('/search-all', authMiddleware, async (req, res) => {
+  try {
+    const query = req.query.query || '';
+    const userId = req.user.id;
+
+    const userMovies = await Movie.find({
+      user: userId,
+      title: { $regex: query, $options: 'i' }
+    });
+
+    const tmdbMovies = await searchMovies(query);
+
+    res.json({
+      userMovies,
+      tmdbMovies
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al buscar películas', error: error.message });
+  }
+});
+
 
 router.delete('/:id', authMiddleware, async (req, res) => {
   try {
